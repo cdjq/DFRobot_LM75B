@@ -1,6 +1,7 @@
 /*!
  * @file DFRobot_LM75B.h
  * @brief 定义DFRobot_LM75B 类的基础结构
+ * @n 这是一个数字温度传感器，用来读取环境温度
  *
  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -105,13 +106,13 @@ public:
     eValue4 = 6 /**<在此模式下，故障队列数为 6>**/
   } eQueueValue_t;
   /*!
-     @brief 构造函数
-     @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire
-     @param addr 7位I2C地址,由前三位决定地址的值，取值(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F)默认0x48
-     @n IIC地址由构成如下图所示
-       6  5  4  3  2  1   0
+   * @brief 构造函数
+   * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire
+   * @param addr 7位I2C地址,由前三位决定地址的值，取值(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F)默认0x48
+   * @n IIC地址由构成如下图所示
+   *   6  5  4  3  2  1   0
        1  0  0  1  A2 A1  A0
-     @n 地址的定义如下表所示,可以通过跳线来改变地址：默认为0x48
+   * @n 地址的定义如下表所示,可以通过跳线来改变地址：默认为0x48
        1  0  0  1  | A2 A1 A0
        1  0  0  1  | 1  1  1       0x4F
        1  0  0  1  | 1  1  0       0x4E
@@ -125,117 +126,117 @@ public:
   DFRobot_LM75B(TwoWire *pWire = &Wire, uint8_t address = 0x48); 
   
   /**
-     @brief 初始化函数
-     @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
-  */
+   * @brief 初始化函数
+   * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
+   */
   int begin();
   
   /**
-     @brief 获取温度值.
-     @return 返回温度值，单位是摄氏度.
-     @n 范围是 -55°C 到 +125°C
-  */
+   * @brief 获取温度值.
+   * @return 返回温度值，单位是摄氏度.
+   * @n 范围是 -55°C 到 +125°C
+   */
   float getTempC();
   
   /**
-     @brief 获取阈值温度.
-     @return 返回温度值，单位是摄氏度.
-     @n 范围是 -55°C 到 +125°C.
-  */
+   * @brief 获取阈值温度.
+   * @return 返回温度值，单位是摄氏度.
+   * @n 范围是 -55°C 到 +125°C.
+   */
   float getTosC(void );
   
   /**
-     @brief 获取滞后温度(类似于自定义的温度范围的最小值).
-     @return 返回温度值，单位是摄氏度.
-     @n 范围是 -55°C 到 +125°C.
-  */
+   * @brief 获取滞后温度(类似于自定义的温度范围的最小值).
+   * @return 返回温度值，单位是摄氏度.
+   * @n 范围是 -55°C 到 +125°C.
+   */
   float getThystC();
   
   /**
-     @brief 设置阈值温度
-     @param 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
-     @n 范围是 -55°C 到 +125°C
-  */
+   * @brief 设置阈值温度
+   * @param Tos 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
+   * @n 范围是 -55°C 到 +125°C
+   */
   void setTos(float Tos);
   
   /**
-     @brief 设置滞后温度(类似于自定义的温度范围的最小值).
-     @param 温度值，单位是摄氏度，需满足Thyst% 0.5 == 0 ；
-     @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
-  */
+   * @brief 设置滞后温度(类似于自定义的温度范围的最小值).
+   * @param Thyst 温度值，单位是摄氏度，需满足Thyst% 0.5 == 0 ；
+   * @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
+   */
   void setThyst(float Thyst);
 
   /**
-     @brief 获取故障队列的值.
-     @return 返回故障队列的值.
-  */
+   * @brief 获取故障队列的值.
+   * @return 返回故障队列的值.
+   */
   eQueueValue_t getQueueValue();
   
   /**
-     @brief 设置故障队列的值.
-     @param eQueueValue_t类型的值，代表故障队列数
-  */
+   * @brief 设置故障队列的值.
+   * @param eQueueValue_t类型的值，代表故障队列数
+   */
   void setQueueValue(eQueueValue_t value);
   
   /**
-     @brief 得到芯片的工作模式的模式.
-     @return 0或1 .
-     @n 0：Normal(正常模式)
-     @n 1：interrupt(关断模式)
-  */
+   * @brief 得到芯片的工作模式的模式.
+   * @return 0或1 .
+   * @n 0：Normal(正常模式)
+   * @n 1：interrupt(关断模式)
+   */
   eShutDownMode_t getShutDownMode();
   
   /**
-     @brief 设置芯片的工作模式.
-     @param eQueueValue_t类型的值，代表芯片工作模式
-  */
+   * @brief 设置芯片的工作模式.
+   * @param eQueueValue_t类型的值，代表芯片工作模式
+   */
   void setShutDownMode(eShutDownMode_t ShutDownMode);
   
   /**
-     @brief 得到OS引脚的active状态是高电平还是低电平.
-     @return 0或1 .
-     @n 0：LOW(active LOW)
-     @n 1：HIGH(active HIGH)
-  */
+   * @brief 得到OS引脚的active状态是高电平还是低电平.
+   * @return 0或1 .
+   * @n 0：LOW(active LOW)
+   * @n 1：HIGH(active HIGH)
+   */
   eOSPolarityMode_t getOSPolarityMode();
   /**
-     @brief 设置OS引脚的active状态是高电平还是低电平..
-     @param eOSPolarityMode_t类型的值，代表OS引脚的极性
-  */
+   * @brief 设置OS引脚的active状态是高电平还是低电平..
+   * @param polarityMode eOSPolarityMode_t类型的值，代表OS引脚的极性
+   */
   void setOSPolarityMode(eOSPolarityMode_t polarityMode);
   
   /**
-     @brief 得到OS引脚的工作模式.
-     @return 0或1 .
-     @n 0：OS comparator(比较器模式)
-     @n 1：OS interrupt(中断模式)
-  */
+   * @brief 得到OS引脚的工作模式.
+   * @return 0或1 .
+   * @n 0：OS comparator(比较器模式)
+   * @n 1：OS interrupt(中断模式)
+   */
   eOSMode_t getOSMode();
   
   /**
-     @brief 设置OS引脚的工作模式..
-     @param eOSMode_t类型的值，代表OS引脚的工作模式.
-  */
+   * @brief 设置OS引脚的工作模式..
+   * @param eOSMode_t类型的值，代表OS引脚的工作模式.
+   */
   void setOSMode(eOSMode_t OSMode);
 
 private:
   
   /**
-     @brief 通过IIC总线写入寄存器值
-     @param reg  寄存器地址 8bits
-     @param pBuf 要写入数据的存放缓存
-     @param size 要写入数据的长度
-     @return 返回实际读取的长度，返回0表示读取失败
-  */
+   * @brief 通过IIC总线写入寄存器值
+   * @param reg  寄存器地址 8bits
+   * @param pBuf 要写入数据的存放缓存
+   * @param size 要写入数据的长度
+   * @return 返回实际读取的长度，返回0表示读取失败
+   */
   void writeReg(uint8_t reg, void* pBuf, size_t size) ;
 
   /**
-     @brief 读取寄存器函数，设计为虚函数，由派生类实现函数体
-     @param reg  寄存器地址 8bits
-     @param pBuf 要写入数据的存放缓存
-     @param size 要写入数据的长度
-     @return 返回实际读取的长度，返回0表示读取失败
-  */
+   * @brief 读取寄存器函数，设计为虚函数，由派生类实现函数体
+   * @param reg  寄存器地址 8bits
+   * @param pBuf 要写入数据的存放缓存
+   * @param size 要写入数据的长度
+   * @return 返回实际读取的长度，返回0表示读取失败
+   */
   uint8_t readReg(uint8_t reg, void* pBuf, size_t size);
   TwoWire *_pWire;
   uint8_t _address;

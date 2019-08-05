@@ -12,7 +12,7 @@
 */
 
 #include <DFRobot_LM75B.h>
-DFRobot_LM75B::DFRobot_LM75B()
+DFRobot_LM75B::DFRobot_LM75B(TwoWire *pWire , uint8_t address )
 {
     _pWire = pWire;
     _address = address;
@@ -234,6 +234,5 @@ uint8_t DFRobot_LM75B::readReg(uint8_t reg, void* pBuf, size_t size)
   for (uint16_t i = 0; i < size; i++) {
     _pBuf[i] = _pWire->read();
   }
-  _pWire->endTransmission();
   return size;
 }

@@ -1,20 +1,38 @@
 /*!
-   @file highTempAlarm.ino
-   @brief 高温报警.
-   @n 实验现象：在开始之前我们会设置阈值温度Tos和滞后温度Thyst，芯片工作状态，
-   @n OS引脚输出模式，故障队列。当温度超过阈值温度Tos时串口就会有信息提示，或者也可
-   @n 以在arduino上加一个蜂鸣器来提醒温度超过阈值
-
-   @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
-   @licence     The MIT License (MIT)
-   @author [fengli](li.feng@dfrobot.com)
-   @version  V1.0
-   @date  2019-07-30
-   @get from https://www.dfrobot.com
-   @https://github.com/DFRobot/DFRobot_LM75B
-*/
+ * @file highTempAlarm.ino
+ * @brief 高温报警.
+ * @n 实验现象：在开始之前我们会设置阈值温度Tos和滞后温度Thyst，芯片工作状态，
+ * @n OS引脚输出模式，故障队列。当温度超过阈值温度Tos时串口就会有信息提示，或者也可
+ * @n 以在arduino上加一个蜂鸣器来提醒温度超过阈值
+ *
+ * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [fengli](li.feng@dfrobot.com)
+ * @version  V1.0
+ * @date  2019-07-30
+ * @get from https://www.dfrobot.com
+ * @https://github.com/DFRobot/DFRobot_LM75B
+ */
 #include <DFRobot_LM75B.h>
 
+/*!
+ * @brief 构造函数
+ * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire
+ * @param addr 7位I2C地址,由前三位决定地址的值，取值(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F)默认0x48
+ * @n IIC地址由构成如下图所示
+ *   6  5  4  3  2  1   0
+     1  0  0  1  A2 A1  A0
+ * @n 地址的定义如下表所示,可以通过跳线来改变地址：默认为0x48
+     1  0  0  1  | A2 A1 A0
+     1  0  0  1  | 1  1  1       0x4F
+     1  0  0  1  | 1  1  0       0x4E
+     1  0  0  1  | 1  0  1       0x4D
+     1  0  0  1  | 1  0  0       0x4C
+     1  0  0  1  | 0  1  1       0x4B
+     1  0  0  1  | 0  1  0       0x5A
+     1  0  0  1  | 0  0  1       0x49
+     1  0  0  1  | 0  0  0       0x48
+*/
 DFRobot_LM75B lm75b(&Wire, 0x48);
 #define OS   (4)
 void setup(void) {
@@ -43,26 +61,29 @@ void setup(void) {
   
   /*!
     设置芯片工作模式
+    ShutDownMode的取值为：
     typedef enum {
     eNormal = 0, //<在此模式下，数据采集周期为100ms,其中10ms用于数据转换，需要电流为300mA，另外90ms处于idle状态，需要电流为10uA>
     eShutdown = 1 //<在此模式下，数据采集停止，但IIC通信不受影响，寄存器也可以正常读写>
     } eShutDownMode_t;
   */
-  lm75b.setShutDownMode(lm75b.eNormal);
+  lm75b.setShutDownMode(/*ShutDownMode=*/lm75b.eNormal);
   
-   /*!
+  /*!
       The OS output active state can be selected as HIGH or LOW by programming bit B2
       (OS_POL) of register Conf
+       polarityMode的取值为：
        typedef enum {
        eActive_LOW = 0,  <在此模式下，OS的active状态为低电平>
        eActive_HIGH = 1  <在此模式下，OS的active状态为高电平>
        } eOSPolarityMode_t;
      当温度值大于阈值温度，若满足则OS输出为active状态，active状态默认为低电平。
   */
-  lm75b.setOSPolarityMode(lm75b.eActive_LOW);
+  lm75b.setOSPolarityMode(/*polarityMode=*/lm75b.eActive_LOW);
   
   /*!
     设置设置OS引脚的模式
+    OSMode的取值为：
     typedef enum {
     eComparator = 0, //<OS口输出采用比较器模式，OS becomes active when the Temp exceeds the Tth(ots), and is reset 
                        when the Temp drops below the Thysh>
@@ -70,7 +91,7 @@ void setup(void) {
                        and then reset, it can be activated again only when the Temp drops below the Thys>
     } eOSMode_t;
   */
-  lm75b.setOSMode(lm75b.eComparator);
+  lm75b.setOSMode(/*OSMode=*/lm75b.eComparator);
   
   /*!
     只有满足故障队列数，OS才会产生中断
@@ -78,7 +99,7 @@ void setup(void) {
     当选择eValue1，只需满足一次温度值大于阈值温度,若满足则OS输出为active状态；
     当选择eValue2，需满足连续二次温度值大于阈值温度,若满足则OS输出为active状态。
     以此类推。
-    the OS output
+    value的取值为：
     typedef enum {
     eValue1 = 1,
     eValue2 = 2,
@@ -86,17 +107,17 @@ void setup(void) {
     eValue4 = 6
     } eQueueValue_t;
   */
-  lm75b.setQueueValue(lm75b.eValue4);
+  lm75b.setQueueValue(/*value=*/lm75b.eValue4);
 }
 
 void loop(void) {
   //检测OS的状态来判断温度是否超过设定值
-    /*!
-         默认设置 device operation mode selection：(0*)normal
-                  OS operation mode selection    ：(0*)OS comparator
-                  OS polarity selection          ：(0*)OS active LOW
-                  OS fault queue programming     ：(00*)queue value = 1
-                  reserved                       ： 000*
+   /*!
+   默认设置 device operation mode selection：(0*)normal
+            OS operation mode selection    ：(0*)OS comparator
+            OS polarity selection          ：(0*)OS active LOW
+            OS fault queue programming     ：(00*)queue value = 1
+            reserved                       ： 000*
   */
   //因为 polarity 选择的是active LOW模式，所以当温度值大于阈值温度，OS输出为低电平
   while (digitalRead(OS) == 0) {

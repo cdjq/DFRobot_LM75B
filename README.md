@@ -1,7 +1,7 @@
 # DFRobot_LM75B
 LM75B 是一个使用了内置带隙温度传感器和Σ-△模数转换技术的温度-数字转换器,能监测环境温度,当温度超过自定义的阈值时,<br>
 它可提供一个过热检测输出(OS pin),并且可以防止噪音干扰<br>
-LM75B器件通过两线的串行IIC总线接口与控制器通信,LM75B有3个可选的逻辑地址管脚，使得同一总线上可同时连接8个器件而不发生地址冲突<br>
+LM75B器件通过两线的串行IIC 总线接口与控制器通信,LM75B 有3个可选的逻辑地址管脚，使得同一总线上可同时连接8个器件而不发生地址冲突<br>
 LM75B 可配置成不同的工作模式。它可设置成在正常工作模式下周期性地对环境温度进行监控或进入关断模式来将器件功耗降至最低.<br>
   分辨率：0.125°C <br>
   精度  ：正负 2 °C <br>
@@ -57,22 +57,22 @@ To use this library, first download the library file, paste it into the \Arduino
 DFRobot_LM75B(TwoWire *pWire = &Wire, uint8_t address = 0x48) ;
 
 /**
- *@brief 初始化函数
- *@return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
+ * @brief 初始化函数
+ * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
  */
 int begin();
 
 /**
- *@brief 获取温度值.
- *@return 返回温度值，单位是摄氏度.
- *@n 范围是 -55°C 到 +125°C
+ * @brief 获取温度值.
+ * @return 返回温度值，单位是摄氏度.
+ * @n 范围是 -55°C 到 +125°C
  */
 float getTempC();
 
 /**
- *@brief 获取阈值温度.
- *@return 返回温度值，单位是摄氏度.
- *@n 范围是 -55°C 到 +125°C.
+ * @brief 获取阈值温度.
+ * @return 返回温度值，单位是摄氏度.
+ * @n 范围是 -55°C 到 +125°C.
  */
 float getTosC(void );
 
@@ -84,70 +84,70 @@ float getTosC(void );
 float getThystC();
 
 /**
- *@brief 设置阈值温度
- *@param 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
- *@n 范围是 -55°C 到 +125°C
+ * @brief 设置阈值温度
+ * @param 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
+ * @n 范围是 -55°C 到 +125°C
  */
 void setTos(float Tos);
 
 /**
- *@brief 设置滞后温度(类似于自定义的温度范围的最小值).
- *@param 温度值，单位是摄氏度，需满足Thyst% 0.5 == 0 ；
- *@n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
+ * @brief 设置滞后温度(类似于自定义的温度范围的最小值).
+ * @param 温度值，单位是摄氏度，需满足Thyst% 0.5 == 0 ；
+ * @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
  */
 void setThyst(float Thyst);
-
- *@brief 获取故障队列的值.
- *@return 返回故障队列的值.
- */
 /**
+ * @brief 获取故障队列的值.
+ * @return 返回故障队列的值.
+ */
+
 eQueueValue_t getQueueValue();
 
 /**
- *@brief 设置故障队列的值，故障队列定义为必须连续发生才能激活OS输出的的故障数量
- *@param eQueueValue_t类型的值，代表故障队列数
+ * @brief 设置故障队列的值，故障队列定义为必须连续发生才能激活OS输出的的故障数量
+ * @param eQueueValue_t类型的值，代表故障队列数
  */
 void setQueueValue(eQueueValue_t value);
 
 /**
- *@brief 得到芯片的工作模式的模式.
- *@return 0或1 .
- *@n 0：Normal(正常模式)
- *@n 1：interrupt(关断模式)
-*/
+ * @brief 得到芯片的工作模式的模式.
+ * @return 0或1 .
+ * @n 0：Normal(正常模式)
+ * @n 1：interrupt(关断模式)
+ */
 eShutDownMode_t getShutDownMode();
 
 /**
- *@brief 设置芯片的工作模式.
- *@param eQueueValue_t类型的值，代表芯片工作模式
+ * @brief 设置芯片的工作模式.
+ * @param eQueueValue_t类型的值，代表芯片工作模式
  */
 void setShutDownMode(eShutDownMode_t ShutDownMode);
 
 /**
- *@brief 得到OS引脚的active状态是高电平还是低电平.
- *@return 0或1 .
- *@n 0：LOW(active LOW)
- *@n 1：HIGH(active HIGH)
+ * @brief 得到OS引脚的active状态是高电平还是低电平.
+ * @return 0或1 .
+ * @n 0：LOW(active LOW)
+ * @n 1：HIGH(active HIGH)
  */
 eOSPolarityMode_t getOSPolarityMode();
 
 /**
- *@brief 设置OS引脚的active状态是高电平还是低电平..
- *@param eOSPolarityMode_t类型的值，代表OS引脚的极性
+ * @brief 设置OS引脚的active状态是高电平还是低电平..
+ * @param eOSPolarityMode_t类型的值，代表OS引脚的极性
  */
 void setOSPolarityMode(eOSPolarityMode_t polarityMode);
 
 /**
- *@brief 得到OS引脚的工作模式.
- *@return 0或1 .
- *@n 0：OS comparator(比较器模式)
- *@n 1：OS interrupt(中断模式)
+ * @brief 得到OS引脚的工作模式.
+ * @return 0或1 .
+ * @n 0：OS comparator(比较器模式)
+ * @n 1：OS interrupt(中断模式)
  */
 eOSMode_t getOSMode();
 
 /**
  * @brief 设置OS引脚的工作模式..
- *@param eOSMode_t类型的值，代表OS引脚的工作模式.
+ * @param eOSMode_t类型的值，代表OS引脚的工作模式.
  */
 void setOSMode(eOSMode_t OSMode);
 ```
