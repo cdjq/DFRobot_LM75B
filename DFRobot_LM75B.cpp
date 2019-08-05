@@ -1,16 +1,22 @@
 /*!
-   @file DFRobot_LM75B.h
-   @brief 定义DFRobot_LM75B 类的基础结构，基础方法的实现
-   @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
-   @licence     The MIT License (MIT)
-   @author [fengli](li.feng@dfrobot.com)
-   @version  V1.0
-   @date  2019-07-28
-   @get from https://www.dfrobot.com
-   @https://github.com/DFRobot/DFRobot_LM75B
+ * @file DFRobot_LM75B.h
+ * @brief 定义DFRobot_LM75B 类的基础结构，基础方法的实现
+ * 
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [fengli](li.feng@dfrobot.com)
+ * @version  V1.0
+ * @date  2019-07-28
+ * @get from https://www.dfrobot.com
+ * @https://github.com/DFRobot/DFRobot_LM75B
 */
 
 #include <DFRobot_LM75B.h>
+DFRobot_LM75B::DFRobot_LM75B()
+{
+    _pWire = pWire;
+    _address = address;
+  };
 int DFRobot_LM75B::begin() 
 {
   uint8_t buffer[2];
@@ -134,7 +140,7 @@ DFRobot_LM75B::eOSPolarityMode_t DFRobot_LM75B::getOSPolarityMode()
   readReg(REG_LM75B_CONF, buffer, 1);
   return (DFRobot_LM75B::eOSPolarityMode_t)((buffer[0] & 0x04) >> 2);
 }
-void DFRobot_LM75B::setOSPolarityMode(DFRobot_LM75B::eOSPolarityMode_t epolarityMode) 
+void DFRobot_LM75B::setOSPolarityMode(eOSPolarityMode_t epolarityMode) 
 {
   DFRobot_LM75B::sMode_t configuration;
   uint8_t buffer[1] = {0};
@@ -153,7 +159,7 @@ DFRobot_LM75B::eQueueValue_t DFRobot_LM75B::getQueueValue()
     return (DFRobot_LM75B::eQueueValue_t)((buffer[0] & 0x18) >> 2);
 }
 
-void DFRobot_LM75B::setQueueValue(DFRobot_LM75B::eQueueValue_t value) 
+void DFRobot_LM75B::setQueueValue(eQueueValue_t value) 
 {
   DFRobot_LM75B::sMode_t configuration;
   uint8_t buffer[1] = {0};
@@ -168,7 +174,7 @@ DFRobot_LM75B::eOSMode_t DFRobot_LM75B::getOSMode()
   readReg(REG_LM75B_CONF, buffer, 1);
   return (DFRobot_LM75B::eOSMode_t)((buffer[0] & 0x02) >> 1);
 }
-void DFRobot_LM75B::setOSMode(DFRobot_LM75B::eOSMode_t osMode) 
+void DFRobot_LM75B::setOSMode(eOSMode_t osMode) 
 {
   DFRobot_LM75B::sMode_t configuration;
   uint8_t buffer[1] = {0};
@@ -189,7 +195,7 @@ DFRobot_LM75B::eShutDownMode_t DFRobot_LM75B::getShutDownMode()
   return (DFRobot_LM75B::eShutDownMode_t)(buffer[0] & 0x01);
 }
 
-void DFRobot_LM75B::setShutDownMode(DFRobot_LM75B::eShutDownMode_t ShutDownMode) 
+void DFRobot_LM75B::setShutDownMode(eShutDownMode_t ShutDownMode) 
 {
   DFRobot_LM75B::sMode_t configuration;
   uint8_t buffer[1] = {0};
