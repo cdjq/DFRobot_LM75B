@@ -45,19 +45,19 @@ void setup(void) {
   pinMode(OS, INPUT);
   
   /**
-       @brief 设置阈值温度
-       @param 温度值，单位是摄氏度，需满足Tos%0.5 == 0 ；
-       @n 范围是 -55°C 到 +125°C
+    @brief 设置阈值温度
+    @param 温度值，单位是摄氏度，需满足Tos%0.5 == 0 ；
+    @n 范围是 -55°C 到 +125°C
   */
-  lm75b.setTos(/*阈值温度=*/33);
+  lm75b.setTos(/*Tos=*/33);
   
   /**
-       @brief 设置滞后温度
-       @param 温度值，单位是摄氏度，需满足Thyst%0.5 == 0 ；
-       @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
+    @brief 设置滞后温度
+    @param 温度值，单位是摄氏度，需满足Thyst%0.5 == 0 ；
+    @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
   */
   //将滞后温度和阈值温度设置相同，那么就在超过阈值温度时OS的状态和低于阈值温度时的状态不一样，就可以做到超温检测.
-  lm75b.setThyst(/*滞后温度=*/33);
+  lm75b.setThyst(/*Thyst=*/33);
   
   /*!
     设置芯片工作模式
@@ -70,14 +70,14 @@ void setup(void) {
   lm75b.setShutDownMode(/*ShutDownMode=*/lm75b.eNormal);
   
   /*!
-      The OS output active state can be selected as HIGH or LOW by programming bit B2
-      (OS_POL) of register Conf
-       polarityMode的取值为：
-       typedef enum {
-       eActive_LOW = 0,  <在此模式下，OS的active状态为低电平>
-       eActive_HIGH = 1  <在此模式下，OS的active状态为高电平>
-       } eOSPolarityMode_t;
-     当温度值大于阈值温度，若满足则OS输出为active状态，active状态默认为低电平。
+    The OS output active state can be selected as HIGH or LOW by programming bit B2
+    (OS_POL) of register Conf
+     polarityMode的取值为：
+     typedef enum {
+     eActive_LOW = 0,  <在此模式下，OS的active状态为低电平>
+     eActive_HIGH = 1  <在此模式下，OS的active状态为高电平>
+     } eOSPolarityMode_t;
+    当温度值大于阈值温度，若满足则OS输出为active状态，active状态默认为低电平。
   */
   lm75b.setOSPolarityMode(/*polarityMode=*/lm75b.eActive_LOW);
   
@@ -108,12 +108,20 @@ void setup(void) {
     } eQueueValue_t;
   */
   lm75b.setQueueValue(/*value=*/lm75b.eValue4);
+  //用户设定值，环境温度超出此值时引起OS状态改变
+  /*getTosC函数的作用时获取Tos寄存器里面存储的阈值(自定义温度范围最大值)大小，
+  */
+  Serial.println("**-----------------------------------------------------**");
+  Serial.print("阈值温度: ");
+  Serial.print(lm75b.getTosC());
+  Serial.println("°C");
+  Serial.println("**-----------------------------------------------------**");
 }
 
 void loop(void) {
   //检测OS的状态来判断温度是否超过设定值
    /*!
-   默认设置 device operation mode selection：(0*)normal
+    默认设置 device operation mode selection：(0*)normal
             OS operation mode selection    ：(0*)OS comparator
             OS polarity selection          ：(0*)OS active LOW
             OS fault queue programming     ：(00*)queue value = 1

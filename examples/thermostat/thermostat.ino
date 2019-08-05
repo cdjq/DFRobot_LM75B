@@ -49,43 +49,68 @@ void setup(void) {
   */
   lm75b.setTos(/*Tos=*/33);
   /**
-       @brief 设置滞后温度
-       @param 温度值，单位是摄氏度，需满足Thyst%0.5 == 0 ；
-       @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
+   @brief 设置滞后温度
+   @param 温度值，单位是摄氏度，需满足Thyst%0.5 == 0 ；
+   @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
   */
   lm75b.setThyst(/*Thyst=*/30.5);
   /*!
-    设置故障队列数,只有满足故障队列数，OS才会产生中断
-    故障队列数：温度寄存器存储的温度值在每次转换完成之后，会自动与阈值温度和滞后温度相比较。
-    当选择eValue1，只需满足一次温度值大于阈值温度。若满足则OS输出为active(见下)状态；
-    当选择eValue2，需满足二次温度值大于阈值温度。若满足则OS输出为active状态。
-    以此类推。
-    eValue的取值为：
-    typedef enum {
-    eValue1 = 1,
-    eValue2 = 2,
-    eValue3 = 4,
-    eValue4 = 6
-    } eQueueValue_t;
+   设置故障队列数,只有满足故障队列数，OS才会产生中断
+   故障队列数：温度寄存器存储的温度值在每次转换完成之后，会自动与阈值温度和滞后温度相比较。
+   当选择eValue1，只需满足一次温度值大于阈值温度。若满足则OS输出为active(见下)状态；
+   当选择eValue2，需满足二次温度值大于阈值温度。若满足则OS输出为active状态。
+   以此类推。
+   value的取值为：
+   typedef enum {
+   eValue1 = 1,
+   eValue2 = 2,
+   eValue3 = 4,
+   eValue4 = 6
+   } eQueueValue_t;
   */
   lm75b.setQueueValue(/*eValue=*/lm75b.eValue4);
+  
+  Serial.println("**-----------------------------------------------------**");
+  //用户设定值，环境温度超出此值时引起OS状态改变
+  /*getTosC函数的作用时获取Tos寄存器里面存储的阈值(自定义温度范围最大值)大小，
+  */
+  Serial.print("阈值温度: ");
+  Serial.print(lm75b.getTosC());
+  Serial.println("°C");
+  //用户设定的滞后温度，低于此值时也会引起OS状态改变
+  /*getThystC函数的作用时获取Thyst寄存器里面存储的滞后限制(自定义温度范围最小值)大小，
+  */
+  Serial.print("滞后温度: ");
+  Serial.print(lm75b.getThystC());
+  Serial.println("°C");
+  Serial.println("**-----------------------------------------------------**");
 }
 
 void loop(void) {
   /*!
-         默认设置 device operation mode selection：(0*)normal
-                  OS operation mode selection    ：(0*)OS comparator
-                  OS polarity selection          ：(0*)OS active LOW
-                  OS fault queue programming     ：(00*)queue value = 1
-                  reserved                       ： 000*
+   默认设置 device operation mode selection：(0*)normal
+            OS operation mode selection    ：(0*)OS comparator
+            OS polarity selection          ：(0*)OS active LOW
+            OS fault queue programming     ：(00*)queue value = 1
+            reserved                       ： 000*
   */
   //因为 polarity 选择的是active LOW模式，所以当温度值大于阈值温度，OS输出为低电平
   if (digitalRead(OS) == 0) {
-    Serial.println("环境温度超过阈值温度，请降温");
+    Serial.print("环境温度: ");
+    /*getTempC 获取环境温度*/
+    Serial.print(/*温度=*/lm75b.getTempC());
+    Serial.println("°C");
+    Serial.println("环境温度较高，请降温");
+    delay(2000);
   }
   if (digitalRead(OS) == 1) {
-    Serial.println("环境温度低于滞后温度，请升温");
+	Serial.print("环境温度: ");
+    /*getTempC 获取环境温度*/
+    Serial.print(/*温度=*/lm75b.getTempC());
+    Serial.println("°C");
+    Serial.println("环境温度较低，请升温");
+    delay(2000);
   }
-  delay(2000);
+  
 
 }

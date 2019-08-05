@@ -174,7 +174,7 @@ public:
   
   /**
    * @brief 设置故障队列的值.
-   * @param eQueueValue_t类型的值，代表故障队列数
+   * @param value eQueueValue_t类型的值，代表故障队列数
    */
   void setQueueValue(eQueueValue_t value);
   
@@ -188,7 +188,7 @@ public:
   
   /**
    * @brief 设置芯片的工作模式.
-   * @param eQueueValue_t类型的值，代表芯片工作模式
+   * @param ShutDownMode eQueueValue_t类型的值，代表芯片工作模式
    */
   void setShutDownMode(eShutDownMode_t ShutDownMode);
   
@@ -215,7 +215,7 @@ public:
   
   /**
    * @brief 设置OS引脚的工作模式..
-   * @param eOSMode_t类型的值，代表OS引脚的工作模式.
+   * @param OSMode eOSMode_t类型的值，代表OS引脚的工作模式.
    */
   void setOSMode(eOSMode_t OSMode);
 

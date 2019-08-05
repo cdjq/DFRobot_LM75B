@@ -3,7 +3,7 @@
  * @brief 读取环境温度.
  * @n 实验现象：我们在开始前读取一次芯片的设置，然后每隔一秒读取一次温度
  * @n 芯片内每100ms采集一次温度数据，读取温度和温度采集与转换并不相互影响.
-
+ *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [fengli](li.feng@dfrobot.com)
@@ -51,20 +51,20 @@ void setup(void) {
   Serial.println(" (0:正常模式/1：关断模式)");
   Serial.print("OS模式: ");
   /**
-     比较器模式：此模式下，OS引脚在环境温度超过Tos设定温度时，产生低电平，然后在低于Thyst恢复高电平，然后一直循环.
-     中断断模式：此模式下，OS在第一次环境温度超过Tos设定温度时被激活，然后产生一个脉冲信号，等到温度低于Thyst才会
-               产生下一个脉冲信号，然后一直循环
+    比较器模式：此模式下，OS引脚在环境温度超过Tos设定温度时，产生低电平，然后在低于Thyst恢复高电平，然后一直循环.
+    中断模式：此模式下，OS在第一次环境温度超过Tos设定温度时被激活，然后产生一个脉冲信号，等到温度低于Thyst才会
+                 产生下一个脉冲信号，然后一直循环
   */
   Serial.print(lm75b.getOSMode());
   Serial.println(" (0:比较器模式/1：中断模式)");
   /*!
-      The OS output active state can be selected as HIGH or LOW by programming bit B2
-      (OS_POL) of register Conf
-       typedef enum {
-       eActive_LOW = 0,  <在此模式下，OS的active状态为低电平>
-       eActive_HIGH = 1  <在此模式下，OS的active状态为高电平>
-       } eOSPolarityMode_t;
-     当温度值大于阈值温度，则OS输出为active状态，active状态默认为低电平。
+    The OS output active state can be selected as HIGH or LOW by programming bit B2
+    (OS_POL) of register Conf
+     typedef enum {
+     eActive_LOW = 0,  <在此模式下，OS的active状态为低电平>
+     eActive_HIGH = 1  <在此模式下，OS的active状态为高电平>
+     } eOSPolarityMode_t;
+    当温度值大于阈值温度，则OS输出为active状态，active状态默认为低电平。
   */
   Serial.print("OS极性: ");
   Serial.print(lm75b.getOSPolarityMode());
@@ -79,10 +79,14 @@ void setup(void) {
   Serial.print("OS故障队列: ");
   Serial.println(lm75b.getQueueValue());
   //用户设定值，环境温度超出此值时引起OS状态改变
+  /*getTosC函数的作用时获取Tos寄存器里面存储的阈值(自定义温度范围最大值)大小，
+  */
   Serial.print("阈值温度: ");
   Serial.print(lm75b.getTosC());
   Serial.println("°C");
   //用户设定的滞后温度，低于此值时也会引起OS状态改变
+  /*getThystC函数的作用时获取Thyst寄存器里面存储的滞后限制(自定义温度范围最小值)大小，
+  */
   Serial.print("滞后温度: ");
   Serial.print(lm75b.getThystC());
   Serial.println("°C");
