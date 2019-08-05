@@ -85,14 +85,14 @@ float getThystC();
 
 /**
  * @brief 设置阈值温度
- * @param 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
+ * @param Tos 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
  * @n 范围是 -55°C 到 +125°C
  */
 void setTos(float Tos);
 
 /**
  * @brief 设置滞后温度(类似于自定义的温度范围的最小值).
- * @param 温度值，单位是摄氏度，需满足Thyst% 0.5 == 0 ；
+ * @param Thyst 温度值，单位是摄氏度，需满足Thyst% 0.5 == 0 ；
  * @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
  */
 void setThyst(float Thyst);
@@ -105,7 +105,7 @@ eQueueValue_t getQueueValue();
 
 /**
  * @brief 设置故障队列的值，故障队列定义为必须连续发生才能激活OS输出的的故障数量
- * @param eQueueValue_t类型的值，代表故障队列数
+ * @param value eQueueValue_t类型的值，代表故障队列数
  */
 void setQueueValue(eQueueValue_t value);
 
@@ -119,7 +119,7 @@ eShutDownMode_t getShutDownMode();
 
 /**
  * @brief 设置芯片的工作模式.
- * @param eQueueValue_t类型的值，代表芯片工作模式
+ * @param ShutDownMode eQueueValue_t类型的值，代表芯片工作模式
  */
 void setShutDownMode(eShutDownMode_t ShutDownMode);
 
@@ -133,7 +133,7 @@ eOSPolarityMode_t getOSPolarityMode();
 
 /**
  * @brief 设置OS引脚的active状态是高电平还是低电平..
- * @param eOSPolarityMode_t类型的值，代表OS引脚的极性
+ * @param polarityMode eOSPolarityMode_t类型的值，代表OS引脚的极性
  */
 void setOSPolarityMode(eOSPolarityMode_t polarityMode);
 
@@ -147,7 +147,7 @@ eOSMode_t getOSMode();
 
 /**
  * @brief 设置OS引脚的工作模式..
- * @param eOSMode_t类型的值，代表OS引脚的工作模式.
+ * @param OSMode eOSMode_t类型的值，代表OS引脚的工作模式.
  */
 void setOSMode(eOSMode_t OSMode);
 ```
