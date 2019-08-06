@@ -1,7 +1,7 @@
 /*!
  * @file DFRobot_LM75B.h
  * @brief 定义DFRobot_LM75B 类的基础结构
- * @n 这是一个数字温度传感器，用来读取环境温度
+ * @n 这是一个数字温度传感器的库，用来读取环境温度
  *
  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -20,11 +20,12 @@
 #endif
 #include <Wire.h>
 
-//#define ENABLE_DBG
 #define REG_LM75B_TEMP    0x00
 #define REG_LM75B_CONF    0x01
 #define REG_LM75B_THYST   0x02
 #define REG_LM75B_TOS     0x03
+
+//#define ENABLE_DBG
 
 #ifdef ENABLE_DBG
 #define DBG(...) {Serial.print("[");Serial.print(__FUNCTION__); Serial.print("(): "); Serial.print(__LINE__); Serial.print(" ] "); Serial.println(__VA_ARGS__);}

@@ -68,7 +68,7 @@ void setup(void) {
    eValue4 = 6
    } eQueueValue_t;
   */
-  lm75b.setQueueValue(/*eValue=*/lm75b.eValue4);
+  lm75b.setQueueValue(/*value=*/lm75b.eValue4);
   
   Serial.println("**-----------------------------------------------------**");
   //用户设定值，环境温度超出此值时引起OS状态改变
@@ -77,6 +77,7 @@ void setup(void) {
   Serial.print("阈值温度: ");
   Serial.print(lm75b.getTosC());
   Serial.println("°C");
+  
   //用户设定的滞后温度，低于此值时也会引起OS状态改变
   /*getThystC函数的作用时获取Thyst寄存器里面存储的滞后限制(自定义温度范围最小值)大小，
   */

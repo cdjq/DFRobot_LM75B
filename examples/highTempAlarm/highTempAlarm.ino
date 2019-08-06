@@ -108,6 +108,7 @@ void setup(void) {
     } eQueueValue_t;
   */
   lm75b.setQueueValue(/*value=*/lm75b.eValue4);
+  
   //用户设定值，环境温度超出此值时引起OS状态改变
   /*getTosC函数的作用时获取Tos寄存器里面存储的阈值(自定义温度范围最大值)大小，
   */
