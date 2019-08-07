@@ -77,7 +77,7 @@ float getTemperatureC();
 float getTosC(void );
 
 /**
- * @brief 获取滞后限制温度(滞后于阈值温度,是阈值温度的下偏差的限制值)..       
+ * @brief 获取滞后限制温度(自定义的温度点，小等于于阈值温度)..       
  * @return 返回温度值，单位是摄氏度.
  * @n 温度值范围是 -55°C 到 +125°C.
  */
@@ -91,7 +91,7 @@ float getHysteresisC();
 void setTos(float Tos);
 
 /**
- * @brief 设置滞后限制温度(滞后于阈值温度,是阈值温度的下偏差的限制值).
+ * @brief 设置滞后限制温度(自定义的温度点，小等于于阈值温度).
  * @param Thyst 温度值，单位是摄氏度，需满足Thyst% 0.5 == 0 ；
  * @n 可设置温度值范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
  */
