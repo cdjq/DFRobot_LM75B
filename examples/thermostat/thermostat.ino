@@ -1,6 +1,6 @@
 /*!
  * @file thermostat.ino
- * @brief 恒温器，让设备保持在阈值温度处,温度变化的下限不能低于滞后限制温度.
+ * @brief 恒温器，让目标设备保持在阈值温度处,温度变化的下限不能低于滞后限制温度.
  * @n 实验现象：在开始之前我们会设置阈值温度Tos(自定义的温度点)和滞后限制温度Thyst(自定义的温度点，小等于于阈值温度)
  * @n 而让温度保持在这个范围内。
  * @n 我们模拟外部环境，当串口打印超过阈值温度Tos时降温，在温度低于滞后限制温度Thyst时升温，达到
@@ -12,7 +12,7 @@
  * @version  V1.0
  * @date  2019-07-30
  * @get from https://www.dfrobot.com
- * @https://github.com/DFRobot/DFRobot_LM75B
+ * @url https://github.com/DFRobot/DFRobot_LM75B
  */
 #include <DFRobot_LM75B.h>
 
@@ -47,7 +47,7 @@ void setup(void) {
   }
   pinMode(OSPin, INPUT);
   /**
-   @brief 自定义阈值温度
+   @brief 自定义阈值温度(Tos:Overtemperature shutdown)
    @param 温度值，单位是摄氏度，需满足Tos%0.5 == 0 ；
    @n 范围是 -55°C 到 +125°C
   */
@@ -60,16 +60,13 @@ void setup(void) {
   */
   lm75b.setHysteresis(/*Thyst=*/32);
   /*!
-   设置故障队列数,只有满足故障队列数，OS才会产生中断
-   故障队列数：温度寄存器存储的温度值在每次转换完成之后，会自动与阈值温度和滞后温度相比较。
-   当选择eValue1，只需满足一次温度值大于阈值温度。若满足则OS输出为active(见下)状态；
-   当选择eValue2，需满足连续两次温度值大于阈值温度。若满足则OS输出为active状态。
-   以此类推。
-   value的取值为：
-   eValue1 
-   eValue2 
-   eValue3 
-   eValue4
+    只有满足故障队列数，OS才会产生中断
+    value的取值为：
+    温度寄存器存储的温度值在每次转换完成之后，会自动与阈值温度和滞后温度相比较。
+    eValue1，需满足一次温度值大于阈值温度。若满足则OS输出为active状态；
+    eValue2，需满足连续二次温度值大于阈值温度。若满足则OS输出为active状态。
+    eValue3，需满足连续四次次温度值大于阈值温度。若满足则OS输出为active状态。
+    eValue4，需满足连续六次温度值大于阈值温度。若满足则OS输出为active状态。
   */
   lm75b.setQueueValue(/*value=*/lm75b.eValue4);
   
@@ -82,7 +79,7 @@ void setup(void) {
   Serial.println("°C");
   
   /*!
-    getThystC函数的作用时获取Thyst寄存器里面存储的滞后限制温度的大小，
+    getHysteresisC函数的作用时获取Thyst寄存器里面存储的滞后限制温度的大小，
     用户设定的滞后温度，会让OS电平的跳变从环境温度小于阈值温度时跳变滞后到小于滞后限制温度时再跳变.
     滞后限制温度产生的效果：当温度大于阈值温度时，OS Pin 变为活跃状态(默认为低电平)，当温度小于阈
     值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 

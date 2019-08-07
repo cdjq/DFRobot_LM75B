@@ -8,15 +8,15 @@
  * @version  V1.0
  * @date  2019-07-28
  * @get from https://www.dfrobot.com
- * @https://github.com/DFRobot/DFRobot_LM75B
-*/
+ * @url https://github.com/DFRobot/DFRobot_LM75B
+ */
 
 #include <DFRobot_LM75B.h>
 DFRobot_LM75B::DFRobot_LM75B(TwoWire *pWire , uint8_t address )
 {
-    _pWire = pWire;
-    _address = address;
-  };
+  _pWire = pWire;
+  _address = address;
+}
 int DFRobot_LM75B::begin() 
 {
   uint8_t buffer[2];
@@ -27,6 +27,10 @@ int DFRobot_LM75B::begin()
     return ERR_DATA_BUS;
   }
   return ERR_OK;
+}
+
+float DFRobot_LM75B::getTemperatureF(){
+  return((getTemperatureC())*1.80+32);
 }
 
 float DFRobot_LM75B::getTemperatureC() 
@@ -46,17 +50,8 @@ float DFRobot_LM75B::getTemperatureC()
     temp = temp & 0x3ff;
     temp = 1024 - temp;
     return -(temp * 0.125);
-  }               //这样写是否可以
-}
-/*uint8_t DFRobot_LM75B::getconfReg(){
-  uint8_t buffer[2]={0};
-  uint8_t write[2]={2,0};
-  writeReg(0x01,write,2);
-  readReg(0x01, buffer, 2);
-  for(uint16_t i = 0;i<2;i++){
-    Serial.println(buffer[i]);
   }
-  }*/
+}
 
 void DFRobot_LM75B::setTos(float Tos) 
 { 
@@ -143,29 +138,26 @@ DFRobot_LM75B::eOSPolarityMode_t DFRobot_LM75B::getOSPolarityMode()
 void DFRobot_LM75B::setOSPolarityMode(eOSPolarityMode_t epolarityMode) 
 {
   DFRobot_LM75B::sMode_t configuration;
-  uint8_t buffer[1] = {0};
-  readReg(REG_LM75B_CONF, buffer, 1);
-  memcpy(&configuration, buffer, sizeof(configuration));
-  configuration.sOS_POL = epolarityMode;
+  readReg(REG_LM75B_CONF, &configuration, 1);
+  configuration.OS_POL = epolarityMode;
   writeReg(REG_LM75B_CONF, &configuration, 1);
 }
 DFRobot_LM75B::eQueueValue_t DFRobot_LM75B::getQueueValue() 
 {
   uint8_t buffer[1] = {0};
   readReg(REG_LM75B_CONF, buffer, 1);
-  if ((buffer[0] & 0x18) == 0)
+  if ((buffer[0] & 0x18) == 0){
     return (DFRobot_LM75B::eQueueValue_t)1;
-  else
+  }else{
     return (DFRobot_LM75B::eQueueValue_t)((buffer[0] & 0x18) >> 2);
+  }
 }
 
 void DFRobot_LM75B::setQueueValue(eQueueValue_t value) 
 {
   DFRobot_LM75B::sMode_t configuration;
-  uint8_t buffer[1] = {0};
-  readReg(REG_LM75B_CONF, buffer, 1);
-  memcpy(&configuration, buffer, sizeof(configuration));
-  configuration.sOS_F_QUE = value>>1;
+  readReg(REG_LM75B_CONF,&configuration, 1);
+  configuration.OS_F_QUE = value>>1;
   writeReg(REG_LM75B_CONF, &configuration, 1);
 }
 DFRobot_LM75B::eOSMode_t DFRobot_LM75B::getOSMode() 
@@ -177,12 +169,10 @@ DFRobot_LM75B::eOSMode_t DFRobot_LM75B::getOSMode()
 void DFRobot_LM75B::setOSMode(eOSMode_t osMode) 
 {
   DFRobot_LM75B::sMode_t configuration;
-  uint8_t buffer[1] = {0};
-  readReg(REG_LM75B_CONF, buffer, 1);
+  readReg(REG_LM75B_CONF,&configuration, 1);
   //先读取此时conf寄存器里面的值
-  memcpy(&configuration, buffer, sizeof(configuration));
   //将OS模式代表的位的数值改变成osMode.
-  configuration.sOS_COMP_INT = osMode;
+  configuration.OS_COMP_INT = osMode;
   //将改好的配置写入conf寄存器.
   writeReg(REG_LM75B_CONF, &configuration, 1);
 }
@@ -198,10 +188,8 @@ DFRobot_LM75B::eShutDownMode_t DFRobot_LM75B::getShutDownMode()
 void DFRobot_LM75B::setShutDownMode(eShutDownMode_t ShutDownMode) 
 {
   DFRobot_LM75B::sMode_t configuration;
-  uint8_t buffer[1] = {0};
-  readReg(REG_LM75B_CONF, buffer, 1);
-  memcpy(&configuration, buffer, sizeof(configuration));
-  configuration.sSHUTDOWN = ShutDownMode;
+  readReg(REG_LM75B_CONF, &configuration, 1);
+  configuration.SHUTDOWN = ShutDownMode;
   writeReg(REG_LM75B_CONF, &configuration, 1);
 }
 

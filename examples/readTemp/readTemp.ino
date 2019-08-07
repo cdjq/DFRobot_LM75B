@@ -10,7 +10,7 @@
  * @version  V1.0
  * @date  2019-07-30
  * @get from https://www.dfrobot.com
- * @https://github.com/DFRobot/DFRobot_LM75B
+ * @url https://github.com/DFRobot/DFRobot_LM75B
  */
 #include <DFRobot_LM75B.h>
 /*!
@@ -85,12 +85,17 @@ void setup(void) {
   /*getTosC函数的作用时获取Tos寄存器里面存储的阈值大小，
   */
   Serial.print("阈值温度: ");
+  /**
+   * @brief 获取阈值温度(Tos:Overtemperature shutdown).
+   * @return 返回温度值，单位是摄氏度.
+   * @n 温度值范围是 -55°C 到 +125°C.
+   */
   Serial.print(lm75b.getTosC());
   Serial.println("°C");
   
   
   /*!
-    getThystC函数的作用时获取Thyst寄存器里面存储的滞后限制温度的大小，
+    getHysteresisC函数的作用时获取Thyst寄存器里面存储的滞后限制温度的大小，
     用户设定的滞后温度，会让OS电平的跳变从环境温度小于阈值温度时跳变滞后到小于滞后限制温度时跳变.
     滞后限制温度产生的效果：当温度大于阈值温度时，OS Pin 变为活跃状态(默认为低电平)，当温度小于阈
     值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 
@@ -102,9 +107,13 @@ void setup(void) {
 }
 
 void loop(void) {
-  Serial.print("环境温度: ");
-  Serial.print(/*温度=*/lm75b.getTemperatureC());
+  Serial.print("环境温度(摄氏度): ");
+  Serial.print(/*摄氏温度=*/lm75b.getTemperatureC());
   Serial.println("°C");
+  Serial.print("环境温度(华氏度): ");
+  Serial.print(/*华氏温度=*/lm75b.getTemperatureF());
+  Serial.println("°F");
+  Serial.println("");
   // 设定的延时应大于100ms；
   delay(1000);
 }

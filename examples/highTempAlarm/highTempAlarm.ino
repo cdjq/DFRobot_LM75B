@@ -11,7 +11,7 @@
  * @version  V1.0
  * @date  2019-07-30
  * @get from https://www.dfrobot.com
- * @https://github.com/DFRobot/DFRobot_LM75B
+ * @url https://github.com/DFRobot/DFRobot_LM75B
  */
 #include <DFRobot_LM75B.h>
 
@@ -48,16 +48,19 @@ void setup(void) {
   pinMode(OSPin, INPUT);
   
   /**
-    @brief 设置阈值温度
+    @brief 设置阈值温度(Tos:Overtemperature shutdown)
     @param 温度值，单位是摄氏度，需满足Tos%0.5 == 0 ；
     @n 范围是 -55°C 到 +125°C
   */
   lm75b.setTos(/*Tos=*/33);
   
   /**
-    @brief 设置滞后温度
+    @brief getHysteresisC函数的作用时获取Thyst寄存器里面存储的滞后限制温度的大小，
     @param 温度值，单位是摄氏度，需满足Thyst%0.5 == 0 ；
     @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
+    @n 用户设定的滞后温度，会让OS电平的跳变从环境温度小于阈值温度时跳变滞后到小于滞后限制温度时跳变.
+    @n 滞后限制温度产生的效果：当温度大于阈值温度时，OS Pin 变为活跃状态(默认为低电平)，当温度小于阈
+    @n 值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 
   */
   //将滞后温度和阈值温度设置相同，那么就在超过阈值温度时OS的状态和低于阈值温度时的状态不一样，就可以做到超温检测.
   lm75b.setHysteresis(/*Thyst=*/33);

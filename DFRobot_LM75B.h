@@ -9,8 +9,8 @@
  * @version  V1.0
  * @date  2019-07-28
  * @get from https://www.dfrobot.com
- * @https://github.com/DFRobot/DFRobot_LM75B
-*/
+ * @url https://github.com/DFRobot/DFRobot_LM75B
+ */
 #ifndef DFROBOT_LM75B_H
 #define DFROBOT_LM75B_H
 #if ARDUINO >= 100
@@ -58,11 +58,11 @@ public:
              reserved                       ： 000*
   */
   typedef struct {
-    uint8_t sSHUTDOWN: 1;
-    uint8_t sOS_COMP_INT: 1;
-    uint8_t sOS_POL: 1;
-    uint8_t sOS_F_QUE: 2;
-    uint8_t sRESERVED: 3;
+    uint8_t SHUTDOWN: 1;
+    uint8_t OS_COMP_INT: 1;
+    uint8_t OS_POL: 1;
+    uint8_t OS_F_QUE: 2;
+    uint8_t RESERVED: 3;
   } __attribute__ ((packed)) sMode_t;
   /*!
         The LM75B can be configured for different operation conditions. It can be set in normal
@@ -106,6 +106,8 @@ public:
     eValue3 = 4,/**<在此模式下，故障队列数为 4>**/
     eValue4 = 6 /**<在此模式下，故障队列数为 6>**/
   } eQueueValue_t;
+  
+public:
   /*!
    * @brief 构造函数
    * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire
@@ -125,13 +127,19 @@ public:
        1  0  0  1  | 0  0  0       0x48
   */
   DFRobot_LM75B(TwoWire *pWire = &Wire, uint8_t address = 0x48); 
-  
+
   /**
    * @brief 初始化函数
    * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
    */
   int begin();
   
+  /**
+   * @brief 获取环境温度值.
+   * @return 返回环境温度值，单位是华氏度.
+   * @n 可以检测的温度范围是 -67°F 到 +257°F
+   */
+  float getTemperatureF();
   /**
    * @brief 获取环境温度值.
    * @return 返回环境温度值，单位是摄氏度.
@@ -239,6 +247,7 @@ private:
    * @return 返回实际读取的长度，返回0表示读取失败
    */
   uint8_t readReg(uint8_t reg, void* pBuf, size_t size);
+private:
   TwoWire *_pWire;
   uint8_t _address;
 };
