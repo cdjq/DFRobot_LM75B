@@ -71,7 +71,7 @@ public:
    register Conf. 
    */
   typedef enum {
-    eNormal = 0, /**<在此模式下，数据采集周期为100ms,其中10ms用于数据转换，需要电流为200mA，另外90ms处于idle状态，需要电流为10uA>**/
+    eNormal = 0, /**<在此模式下，数据采集周期为100ms,其中10ms用于数据转换，需要电流为200uA，另外90ms处于idle状态，需要电流为10uA>**/
     eShutdown = 1 /**<在此模式下，数据采集停止，但IIC通信不受影响，寄存器也可以正常读写>**/
   } eShutDownMode_t;
   /*!
@@ -133,39 +133,39 @@ public:
   int begin();
   
   /**
-   * @brief 获取温度值.
-   * @return 返回温度值，单位是摄氏度.
-   * @n 范围是 -55°C 到 +125°C
+   * @brief 获取环境温度值.
+   * @return 返回环境温度值，单位是摄氏度.
+   * @n 可以检测的温度范围是 -55°C 到 +125°C
    */
-  float getTempC();
+  float getTemperatureC();
   
   /**
-   * @brief 获取阈值温度.
+   * @brief 获取阈值温度(Tos:Overtemperature shutdown).
    * @return 返回温度值，单位是摄氏度.
-   * @n 范围是 -55°C 到 +125°C.
+   * @n 温度值范围是 -55°C 到 +125°C.
    */
   float getTosC(void );
   
   /**
-   * @brief 获取滞后限制温度(滞后于阈值温度,是阈值温度的下偏差的限制值).
+   * @brief 获取滞后限制温度(自定义的温度点，小等于于阈值温度)..
    * @return 返回温度值，单位是摄氏度.
-   * @n 范围是 -55°C 到 +125°C.
+   * @n 温度值范围是 -55°C 到 +125°C.
    */
-  float getThystC();
+  float getHysteresisC();
   
   /**
-   * @brief 设置阈值温度
+   * @brief 设置阈值温度(自定义的温度点)
    * @param Tos 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
    * @n 范围是 -55°C 到 +125°C
    */
   void setTos(float Tos);
   
   /**
-   * @brief 设置滞后限制温度(滞后于阈值温度,是阈值温度的下偏差的限制值).
+   * @brief 设置滞后限制温度(自定义的温度点，小等于于阈值温度).
    * @param Thyst 温度值，单位是摄氏度，需满足Thyst% 0.5 == 0 ；
    * @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
    */
-  void setThyst(float Thyst);
+  void setHysteresis(float Thyst);
 
   /**
    * @brief 获取故障队列的值.

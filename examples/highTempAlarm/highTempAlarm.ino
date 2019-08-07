@@ -1,7 +1,7 @@
 /*!
  * @file highTempAlarm.ino
  * @brief 高温报警.
- * @n 实验现象：在开始之前我们会设置阈值温度Tos和滞后温度Thyst，芯片工作状态，
+ * @n 实验现象：在开始之前我们会设置阈值温度Tos和滞后温度Thyst(设置与Tos值相同)，芯片工作状态，
  * @n OS引脚输出模式，故障队列。当温度超过阈值温度Tos时串口就会有信息提示，或者也可
  * @n 以在arduino上加一个蜂鸣器来提醒温度超过阈值
  *
@@ -33,8 +33,11 @@
      1  0  0  1  | 0  0  1       0x49
      1  0  0  1  | 0  0  0       0x48
 */
-DFRobot_LM75B lm75b(&Wire, 0x48);
-#define OS   (4)
+//如果需要自己定义软IIC和改变芯片地址，便使用此构造函数
+//DFRobot_LM75B lm75b(&Wire, 0x48);
+DFRobot_LM75B lm75b; 
+#define OSPin   (4)
+
 void setup(void) {
   Serial.begin(115200);
   //检测IIC是否能正常通信.
@@ -42,7 +45,7 @@ void setup(void) {
     Serial.println("IIC初始化失败，请检测连线是否正确");
     delay(1000);
   }
-  pinMode(OS, INPUT);
+  pinMode(OSPin, INPUT);
   
   /**
     @brief 设置阈值温度
@@ -57,15 +60,13 @@ void setup(void) {
     @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
   */
   //将滞后温度和阈值温度设置相同，那么就在超过阈值温度时OS的状态和低于阈值温度时的状态不一样，就可以做到超温检测.
-  lm75b.setThyst(/*Thyst=*/33);
+  lm75b.setHysteresis(/*Thyst=*/33);
   
   /*!
     设置芯片工作模式
     ShutDownMode的取值为：
-    typedef enum {
-    eNormal = 0, //<在此模式下，数据采集周期为100ms,其中10ms用于数据转换，需要电流为300mA，另外90ms处于idle状态，需要电流为10uA>
-    eShutdown = 1 //<在此模式下，数据采集停止，但IIC通信不受影响，寄存器也可以正常读写>
-    } eShutDownMode_t;
+    eNormal  在此模式下，数据采集周期为100ms,其中10ms用于数据转换，需要电流为300mA，另外90ms处于idle状态，需要电流为10uA
+    eShutdown 在此模式下，数据采集停止，但IIC通信不受影响，寄存器也可以正常读写
   */
   lm75b.setShutDownMode(/*ShutDownMode=*/lm75b.eNormal);
   
@@ -73,10 +74,8 @@ void setup(void) {
     The OS output active state can be selected as HIGH or LOW by programming bit B2
     (OS_POL) of register Conf
      polarityMode的取值为：
-     typedef enum {
-     eActive_LOW = 0,  <在此模式下，OS的active状态为低电平>
-     eActive_HIGH = 1  <在此模式下，OS的active状态为高电平>
-     } eOSPolarityMode_t;
+     eActive_LOW   在此模式下，OS的active状态为低电平
+     eActive_HIGH   在此模式下，OS的active状态为高电平
     当温度值大于阈值温度，若满足则OS输出为active状态，active状态默认为低电平。
   */
   lm75b.setOSPolarityMode(/*polarityMode=*/lm75b.eActive_LOW);
@@ -84,28 +83,21 @@ void setup(void) {
   /*!
     设置设置OS引脚的模式
     OSMode的取值为：
-    typedef enum {
-    eComparator = 0, //<OS口输出采用比较器模式，OS becomes active when the Temp exceeds the Tth(ots), and is reset 
-                       when the Temp drops below the Thysh>
-    eInterrupt = 1 //<在此模式下，OS口输出采用中断模式,Once the OS output has been activated by crossing Tth(ots) 
-                       and then reset, it can be activated again only when the Temp drops below the Thys>
-    } eOSMode_t;
+    eComparator   OS口输出采用比较器模式，OS becomes active when the Temp exceeds the Tth(ots), and is reset 
+                       when the Temp drops below the Thysh
+    eInterrupt    在此模式下，OS口输出采用中断模式,Once the OS output has been activated by crossing Tth(ots) 
+                       and then reset, it can be activated again only when the Temp drops below the Thys
   */
   lm75b.setOSMode(/*OSMode=*/lm75b.eComparator);
   
   /*!
     只有满足故障队列数，OS才会产生中断
-    故障队列数：温度寄存器存储的温度值在每次转换完成之后，会自动与阈值温度和滞后温度相比较。
-    当选择eValue1，只需满足一次温度值大于阈值温度,若满足则OS输出为active状态；
-    当选择eValue2，需满足连续两次温度值大于阈值温度,若满足则OS输出为active状态。
-    以此类推。
     value的取值为：
-    typedef enum {
-    eValue1 = 1,
-    eValue2 = 2,
-    eValue3 = 4,
-    eValue4 = 6
-    } eQueueValue_t;
+    温度寄存器存储的温度值在每次转换完成之后，会自动与阈值温度和滞后温度相比较。
+    eValue1，需满足一次温度值大于阈值温度。若满足则OS输出为active状态；
+    eValue2，需满足连续二次温度值大于阈值温度。若满足则OS输出为active状态。
+    eValue3，需满足连续四次次温度值大于阈值温度。若满足则OS输出为active状态。
+    eValue4，需满足连续六次温度值大于阈值温度。若满足则OS输出为active状态。
   */
   lm75b.setQueueValue(/*value=*/lm75b.eValue4);
   
@@ -129,7 +121,7 @@ void loop(void) {
             reserved                       ： 000*
   */
   //因为 polarity 选择的是active LOW模式，所以当温度值大于阈值温度，OS输出为低电平
-  while (digitalRead(OS) == 0) {
+  while (digitalRead(OSPin) == 0) {
     Serial.println("环境温度超过阈值温度，请注意");
     delay(5000);
   }

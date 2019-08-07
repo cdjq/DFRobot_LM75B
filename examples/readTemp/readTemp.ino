@@ -31,7 +31,9 @@
      1  0  0  1  | 0  0  1       0x49
      1  0  0  1  | 0  0  0       0x48
 */
-DFRobot_LM75B lm75b(&Wire, 0x48);
+//如果需要自己定义软IIC和改变芯片地址，便使用此构造函数
+//DFRobot_LM75B lm75b(&Wire, 0x48);
+DFRobot_LM75B lm75b; 
 
 void setup(void) {
   Serial.begin(115200);
@@ -60,10 +62,8 @@ void setup(void) {
   /*!
     The OS output active state can be selected as HIGH or LOW by programming bit B2
     (OS_POL) of register Conf
-     typedef enum {
      eActive_LOW = 0,  <在此模式下，OS的active状态为低电平>
      eActive_HIGH = 1  <在此模式下，OS的active状态为高电平>
-     } eOSPolarityMode_t;
     当温度值大于阈值温度，则OS输出为active状态，active状态默认为低电平。
   */
   Serial.print("OS极性: ");
@@ -72,32 +72,38 @@ void setup(void) {
   /*!
     只有满足故障队列数，OS才会产生中断
     故障队列数：温度寄存器存储的温度值在每次转换完成之后，会自动与阈值温度和滞后温度相比较。
-    当选择eValue1，只需满足一次温度值大于阈值温度。若满足则OS输出为active状态；
-    当选择eValue2，需满足二次温度值大于阈值温度。若满足则OS输出为active状态。
+    eValue1=1，需满足一次温度值大于阈值温度。若满足则OS输出为active状态；
+    eValue2=2，需满足连续二次温度值大于阈值温度。若满足则OS输出为active状态。
+    eValue3=4，需满足连续四次次温度值大于阈值温度。若满足则OS输出为active状态。
+    eValue4=6，需满足连续六次温度值大于阈值温度。若满足则OS输出为active状态。
     以此类推。
    */
   Serial.print("OS故障队列: ");
-  Serial.println(lm75b.getQueueValue());
-  
+  Serial.print(lm75b.getQueueValue());
+  Serial.println(" (OS输出变为active状态需要连续满足环境温度大于阈值温度的次数)");
   //用户设定值，环境温度超出此值时引起OS状态改变
-  /*getTosC函数的作用时获取Tos寄存器里面存储的阈值(自定义温度范围最大值)大小，
+  /*getTosC函数的作用时获取Tos寄存器里面存储的阈值大小，
   */
   Serial.print("阈值温度: ");
   Serial.print(lm75b.getTosC());
   Serial.println("°C");
   
-  //用户设定的滞后温度，低于此值时也会引起OS状态改变
-  /*getThystC函数的作用时获取Thyst寄存器里面存储的滞后限制(自定义温度范围最小值)大小，
+  
+  /*!
+    getThystC函数的作用时获取Thyst寄存器里面存储的滞后限制温度的大小，
+    用户设定的滞后温度，会让OS电平的跳变从环境温度小于阈值温度时跳变滞后到小于滞后限制温度时跳变.
+    滞后限制温度产生的效果：当温度大于阈值温度时，OS Pin 变为活跃状态(默认为低电平)，当温度小于阈
+    值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 
   */
   Serial.print("滞后温度: ");
-  Serial.print(lm75b.getThystC());
+  Serial.print(lm75b.getHysteresisC());
   Serial.println("°C");
   Serial.println("**-----------------------------------------------------**");
 }
 
 void loop(void) {
   Serial.print("环境温度: ");
-  Serial.print(/*温度=*/lm75b.getTempC());
+  Serial.print(/*温度=*/lm75b.getTemperatureC());
   Serial.println("°C");
   // 设定的延时应大于100ms；
   delay(1000);

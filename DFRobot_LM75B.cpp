@@ -29,7 +29,7 @@ int DFRobot_LM75B::begin()
   return ERR_OK;
 }
 
-float DFRobot_LM75B::getTempC() 
+float DFRobot_LM75B::getTemperatureC() 
 {
   uint16_t temp = 0;
   uint8_t buffer[2] = {0};
@@ -77,7 +77,7 @@ void DFRobot_LM75B::setTos(float Tos)
   }
   writeReg(REG_LM75B_TOS, write, 2);
 }
-void DFRobot_LM75B::setThyst(float Thyst) 
+void DFRobot_LM75B::setHysteresis(float Thyst) 
 { 
   // 滞后值的范围不能在温度测量范围之外
   if(Thyst > 125.0)
@@ -115,7 +115,7 @@ float DFRobot_LM75B::getTosC(void )
     return -(Tos / 2.0);
   }
 }
-float DFRobot_LM75B::getThystC() 
+float DFRobot_LM75B::getHysteresisC() 
 {
   uint16_t Thyst = 0;
   uint8_t buffer[2] = {0};
