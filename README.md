@@ -98,16 +98,19 @@ float getHysteresisC();
 void setTos(float Tos);
 
 /**
- * @brief 设置滞后限制温度(自定义的温度点，小等于于阈值温度).
- * @param Thyst 温度值，单位是摄氏度，需满足Thyst% 0.5 == 0 ；
- * @n 可设置温度值范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
+ * @brief 自定义滞后限制温度
+ * @param 温度值，单位是摄氏度，需满足Thyst%0.5 == 0 ；
+ * @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
+ * @n 用户设定的滞后温度，会让OS引脚电平的跳变点从环境温度小于阈值温度时跳变滞后到小于滞后限制温度时再跳变.
+ * @n 滞后限制温度产生的效果：当温度大于阈值温度时，OS Pin 变为活跃状态(默认为低电平)，当温度小于阈
+ * @n 值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 
  */
 void setHysteresis(float Thyst);
+
 /**
  * @brief 获取故障队列的值.
  * @return 返回故障队列的值.
  */
-
 eQueueValue_t getQueueValue();
 
 /**

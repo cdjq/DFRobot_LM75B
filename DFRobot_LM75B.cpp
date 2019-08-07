@@ -29,7 +29,8 @@ int DFRobot_LM75B::begin()
   return ERR_OK;
 }
 
-float DFRobot_LM75B::getTemperatureF(){
+float DFRobot_LM75B::getTemperatureF()
+{
   return((getTemperatureC())*1.80+32);
 }
 
