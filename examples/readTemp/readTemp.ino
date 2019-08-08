@@ -84,7 +84,7 @@ void setup(void) {
   //用户设定值，环境温度超出此值时引起OS状态改变
   /*getTosC函数的作用时获取Tos寄存器里面存储的阈值大小，
   */
-  Serial.print("阈值温度: ");
+  Serial.print("阈值温度(摄氏度): ");
   /**
    * @brief 获取阈值温度(Tos:Overtemperature shutdown).
    * @return 返回温度值，单位是摄氏度.
@@ -92,17 +92,31 @@ void setup(void) {
    */
   Serial.print(lm75b.getTosC());
   Serial.println("°C");
-  
-  
+  /**
+   * @brief 获取阈值温度(Tos:Overtemperature shutdown).
+   * @return 返回温度值，单位是华氏度.
+   * @n 温度范围是 -67°F 到 +257°F.
+   */
+  //Serial.print("阈值温度(华氏度): ");
+  //Serial.print(lm75b.getTosF());
+  //Serial.println("°F");
   /*!
     getHysteresisC函数的作用时获取Thyst寄存器里面存储的滞后限制温度的大小，
     用户设定的滞后温度，会让OS电平的跳变从环境温度小于阈值温度时跳变滞后到小于滞后限制温度时跳变.
     滞后限制温度产生的效果：当温度大于阈值温度时，OS Pin 变为活跃状态(默认为低电平)，当温度小于阈
     值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 
   */
-  Serial.print("滞后温度: ");
+  Serial.print("滞后温度(华氏度): ");
   Serial.print(lm75b.getHysteresisC());
   Serial.println("°C");
+  /**
+   * @brief 获取滞后限制温度(自定义的温度点，小等于于阈值温度)..
+   * @return 返回温度值，单位是华氏度.
+   * @n 温度范围是 -67°F 到 +257°F.
+   */
+  //Serial.print("滞后温度(华氏度): ");
+  //Serial.print(lm75b.getHysteresisF());
+  //Serial.println("°F");
   Serial.println("**-----------------------------------------------------**");
 }
 

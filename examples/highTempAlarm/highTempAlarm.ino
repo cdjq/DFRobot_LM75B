@@ -36,7 +36,8 @@
 //如果需要自己定义软IIC和改变芯片地址，便使用此构造函数
 //DFRobot_LM75B lm75b(&Wire, 0x48);
 DFRobot_LM75B lm75b; 
-#define OSPin   (4)
+//OS引脚连接Arduino数字引脚2，通过引脚4监控OS脚的电平变化
+#define OSPin   (2)
 
 void setup(void) {
   Serial.begin(115200);
@@ -52,10 +53,11 @@ void setup(void) {
     @param 温度值，单位是摄氏度，需满足Tos%0.5 == 0 ；
     @n 范围是 -55°C 到 +125°C
   */
-  lm75b.setTos(/*Tos=*/33);
-  
+  lm75b.setTosC(/*Tos=*/33);
+  //使用华氏度对阈值寄存器设置    
+  //lm75b.setTosF(/*Tos=*/91);
   /**
-    @brief getHysteresisC函数的作用时获取Thyst寄存器里面存储的滞后限制温度的大小，
+    @brief setHysteresisC自定义滞后温度的大小
     @param 温度值，单位是摄氏度，需满足Thyst%0.5 == 0 ；
     @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
     @n 用户设定的滞后温度，会让OS电平的跳变从环境温度小于阈值温度时跳变滞后到小于滞后限制温度时跳变.
@@ -63,12 +65,15 @@ void setup(void) {
     @n 值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 
   */
   //将滞后温度和阈值温度设置相同，那么就在超过阈值温度时OS的状态和低于阈值温度时的状态不一样，就可以做到超温检测.
-  lm75b.setHysteresis(/*Thyst=*/33);
+  lm75b.setHysteresisC(/*Thyst=*/33);
+  //使用华氏度对滞后寄存器设置
+  //lm75b.setHysteresisF(/*Thyst=*/91);
+  
   
   /*!
     设置芯片工作模式
     ShutDownMode的取值为：
-    eNormal  在此模式下，数据采集周期为100ms,其中10ms用于数据转换，需要电流为300mA，另外90ms处于idle状态，需要电流为10uA
+    eNormal  在此模式下，数据采集周期为100ms,其中10ms用于数据转换，需要电流为300uA，另外90ms处于idle状态，需要电流为10uA
     eShutdown 在此模式下，数据采集停止，但IIC通信不受影响，寄存器也可以正常读写
   */
   lm75b.setShutDownMode(/*ShutDownMode=*/lm75b.eNormal);
@@ -108,9 +113,17 @@ void setup(void) {
   /*getTosC函数的作用时获取Tos寄存器里面存储的阈值大小，
   */
   Serial.println("**-----------------------------------------------------**");
-  Serial.print("阈值温度: ");
+  Serial.print("阈值温度(摄氏度): ");
   Serial.print(lm75b.getTosC());
   Serial.println("°C");
+  /**
+   * @brief 获取阈值温度(Tos:Overtemperature shutdown).
+   * @return 返回温度值，单位是华氏度.
+   * @n 温度范围是 -67°F 到 +257°F.
+   */
+  //Serial.print("阈值温度(华氏度): ");
+  //Serial.print(lm75b.getTosF());
+  //Serial.println("°F");
   Serial.println("**-----------------------------------------------------**");
 }
 
@@ -126,6 +139,11 @@ void loop(void) {
   //因为 polarity 选择的是active LOW模式，所以当温度值大于阈值温度，OS输出为低电平
   while (digitalRead(OSPin) == 0) {
     Serial.println("环境温度超过阈值温度，请注意");
-    delay(5000);
+    delay(3000);
   }
+  Serial.print("环境温度: ");
+  /*getTempC 获取环境温度*/
+  Serial.print(/*温度=*/lm75b.getTemperatureC());
+  Serial.println("°C");
+  delay(3000);
 }

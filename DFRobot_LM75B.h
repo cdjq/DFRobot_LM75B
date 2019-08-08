@@ -155,6 +155,13 @@ public:
   float getTosC(void );
   
   /**
+   * @brief 获取阈值温度(Tos:Overtemperature shutdown).
+   * @return 返回温度值，单位是华氏度.
+   * @n 温度范围是 -67°F 到 +257°F.
+   */
+  float getTosF(void );
+  
+  /**
    * @brief 获取滞后限制温度(自定义的温度点，小等于于阈值温度)..
    * @return 返回温度值，单位是摄氏度.
    * @n 温度值范围是 -55°C 到 +125°C.
@@ -162,22 +169,41 @@ public:
   float getHysteresisC();
   
   /**
+   * @brief 获取滞后限制温度(自定义的温度点，小等于于阈值温度)..
+   * @return 返回温度值，单位是华氏度.
+   * @n 温度范围是 -67°F 到 +257°F.
+   */
+  float getHysteresisF();
+  
+  /**
    * @brief 设置阈值温度(自定义的温度点)
    * @param Tos 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
    * @n 范围是 -55°C 到 +125°C
    */
-  void setTos(float Tos);
-  
+  void setTosC(float Tos);
+  /**
+   * @brief 设置阈值温度(自定义的温度点)
+   * @param Tos 温度值，单位是华氏度，需满足Tos% 0.5 == 0 ；
+   * @n 温度范围是 -67°F 到 +257°F
+   */
+  void setTosF(float TosF);
   /**
    * @brief 自定义滞后限制温度
-   * @param Thyst 温度值，单位是摄氏度，需满足Thyst%0.5 == 0 ；
+   * @param Thyst 温度值，单位是摄氏度(°C)，需满足Thyst%0.5 == 0 ；
    * @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
    * @n 用户设定的滞后温度，会让OS电平的跳变从环境温度小于阈值温度延迟到小于滞后限制温度时再跳变.
    * @n 滞后限制温度产生的效果：当温度大于阈值温度时，OS Pin 变为活跃状态(默认为低电平)，当温度小于阈
    * @n 值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 
    */
-  void setHysteresis(float Thyst);
-
+  void setHysteresisC(float Thyst);
+  
+  /**
+   * @brief 自定义滞后限制温度
+   * @param Thyst 温度值，单位是华氏度(°F)，需满足Thyst%0.5 == 0 ；
+   * @n 温度范围是 -67°F 到 +257°F,Thyst 必须小于等于 Tos 的值.
+   */
+  void setHysteresisF(float ThystF);
+  
   /**
    * @brief 获取故障队列的值.
    * @return 返回故障队列的值.

@@ -54,7 +54,7 @@ float DFRobot_LM75B::getTemperatureC()
   }
 }
 
-void DFRobot_LM75B::setTos(float Tos) 
+void DFRobot_LM75B::setTosC(float Tos) 
 { 
   // 阈值的范围不能在温度测量范围之外
   if(Tos > 125.0)
@@ -73,7 +73,16 @@ void DFRobot_LM75B::setTos(float Tos)
   }
   writeReg(REG_LM75B_TOS, write, 2);
 }
-void DFRobot_LM75B::setHysteresis(float Thyst) 
+
+void DFRobot_LM75B::setTosF(float TosF)
+{
+  setTosC((TosF-32)*(5/9));
+}
+void DFRobot_LM75B::setHysteresisF(float ThystF)
+{
+  setHysteresisC((ThystF-32)*(5/9));
+}
+void DFRobot_LM75B::setHysteresisC(float Thyst) 
 { 
   // 滞后值的范围不能在温度测量范围之外
   if(Thyst > 125.0)
@@ -110,6 +119,13 @@ float DFRobot_LM75B::getTosC(void )
     Tos = 256 - Tos;
     return -(Tos / 2.0);
   }
+}
+float DFRobot_LM75B::getTosF(void )
+{
+  return((getTosC())*1.80+32);
+}
+float DFRobot_LM75B::getHysteresisF(){
+  return((getHysteresisC())*1.80+32);
 }
 float DFRobot_LM75B::getHysteresisC() 
 {

@@ -16,9 +16,13 @@ begin	KEYWORD2
 getTemperatureF	KEYWORD2
 getTemperatureC	KEYWORD2
 getTosC	KEYWORD2
+getTosF	KEYWORD2
 getHysteresisC	KEYWORD2
-setTos	KEYWORD2
-setHysteresis	KEYWORD2
+getHysteresisF	KEYWORD2
+setTosC	KEYWORD2
+setTosF	KEYWORD2
+setHysteresisC	KEYWORD2
+setHysteresisF	KEYWORD2
 getQueueValue	KEYWORD2
 setQueueValue	KEYWORD2
 getShutDownMode	KEYWORD2
@@ -42,4 +46,3 @@ eValue1	LITERAL1
 eValue2	LITERAL1
 eValue3	LITERAL1
 eValue4	LITERAL1
-OSPin	LITERAL1

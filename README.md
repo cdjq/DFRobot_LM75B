@@ -36,25 +36,25 @@ To use this library, first download the library file, paste it into the \Arduino
 
 ```C++
     
-/**
+/*!
  * @brief 构造函数
  * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire
  * @param addr 7位I2C地址,由前三位决定地址的值，取值(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F)默认0x48
  * @n IIC地址由构成如下图所示
-        6  5  4  3  2  1   0
-        1  0  0  1  A2 A1  A0
+ *   6  5  4  3  2  1   0
+     1  0  0  1  A2 A1  A0
  * @n 地址的定义如下表所示,可以通过跳线来改变地址：默认为0x48
-        1  0  0  1  | A2 A1 A0
-        1  0  0  1  | 1  1  1       0x4F
-        1  0  0  1  | 1  1  0       0x4E
-        1  0  0  1  | 1  0  1       0x4D
-        1  0  0  1  | 1  0  0       0x4C
-        1  0  0  1  | 0  1  1       0x4B
-        1  0  0  1  | 0  1  0       0x4A
-        1  0  0  1  | 0  0  1       0x49
-        1  0  0  1  | 0  0  0       0x48
- */
-DFRobot_LM75B(TwoWire *pWire = &Wire, uint8_t address = 0x48) ;
+     1  0  0  1  | A2 A1 A0
+     1  0  0  1  | 1  1  1       0x4F
+     1  0  0  1  | 1  1  0       0x4E
+     1  0  0  1  | 1  0  1       0x4D
+     1  0  0  1  | 1  0  0       0x4C
+     1  0  0  1  | 0  1  1       0x4B
+     1  0  0  1  | 0  1  0       0x5A
+     1  0  0  1  | 0  0  1       0x49
+     1  0  0  1  | 0  0  0       0x48
+*/
+DFRobot_LM75B(TwoWire *pWire = &Wire, uint8_t address = 0x48); 
 
 /**
  * @brief 初始化函数
@@ -68,7 +68,6 @@ int begin();
  * @n 可以检测的温度范围是 -67°F 到 +257°F
  */
 float getTemperatureF();
-
 /**
  * @brief 获取环境温度值.
  * @return 返回环境温度值，单位是摄氏度.
@@ -77,35 +76,61 @@ float getTemperatureF();
 float getTemperatureC();
 
 /**
- * @brief 获取阈值温度(Tos:Overtemperature shutdown)..
+ * @brief 获取阈值温度(Tos:Overtemperature shutdown).
  * @return 返回温度值，单位是摄氏度.
  * @n 温度值范围是 -55°C 到 +125°C.
  */
 float getTosC(void );
 
 /**
- * @brief 获取滞后限制温度(自定义的温度点，小等于于阈值温度)..       
+ * @brief 获取阈值温度(Tos:Overtemperature shutdown).
+ * @return 返回温度值，单位是华氏度.
+ * @n 温度范围是 -67°F 到 +257°F.
+ */
+float getTosF(void );
+
+/**
+ * @brief 获取滞后限制温度(自定义的温度点，小等于于阈值温度)..
  * @return 返回温度值，单位是摄氏度.
  * @n 温度值范围是 -55°C 到 +125°C.
  */
 float getHysteresisC();
 
 /**
- * @brief 设置阈值温度
- * @param Tos 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
- * @n 可设置温度值范围是 -55°C 到 +125°C
+ * @brief 获取滞后限制温度(自定义的温度点，小等于于阈值温度)..
+ * @return 返回温度值，单位是华氏度.
+ * @n 温度范围是 -67°F 到 +257°F.
  */
-void setTos(float Tos);
+float getHysteresisF();
 
 /**
+ * @brief 设置阈值温度(自定义的温度点)
+ * @param Tos 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
+ * @n 范围是 -55°C 到 +125°C
+ */
+void setTosC(float Tos);
+/**
+ * @brief 设置阈值温度(自定义的温度点)
+ * @param Tos 温度值，单位是华氏度，需满足Tos% 0.5 == 0 ；
+ * @n 温度范围是 -67°F 到 +257°F
+ */
+void setTosF(float TosF);
+/**
  * @brief 自定义滞后限制温度
- * @param 温度值，单位是摄氏度，需满足Thyst%0.5 == 0 ；
+ * @param Thyst 温度值，单位是摄氏度(°C)，需满足Thyst%0.5 == 0 ；
  * @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
  * @n 用户设定的滞后温度，会让OS电平的跳变从环境温度小于阈值温度延迟到小于滞后限制温度时再跳变.
  * @n 滞后限制温度产生的效果：当温度大于阈值温度时，OS Pin 变为活跃状态(默认为低电平)，当温度小于阈
  * @n 值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 
  */
-void setHysteresis(float Thyst);
+void setHysteresisC(float Thyst);
+
+/**
+ * @brief 自定义滞后限制温度
+ * @param Thyst 温度值，单位是华氏度(°F)，需满足Thyst%0.5 == 0 ；
+ * @n 温度范围是 -67°F 到 +257°F,Thyst 必须小于等于 Tos 的值.
+ */
+void setHysteresisF(float ThystF);
 
 /**
  * @brief 获取故障队列的值.
@@ -146,7 +171,6 @@ void setShutDownMode(eShutDownMode_t ShutDownMode);
  * @n 1：HIGH(active HIGH)
  */
 eOSPolarityMode_t getOSPolarityMode();
-
 /**
  * @brief 设置OS引脚的active状态是高电平还是低电平..
  * @param polarityMode eOSPolarityMode_t类型的值，代表OS引脚的极性
