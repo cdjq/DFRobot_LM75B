@@ -1,8 +1,8 @@
 /*!
  * @file highTempAlarm.ino
- * @brief 高温报警.
- * @n 实验现象：在开始之前我们会设置阈值温度Tos和滞后温度Thyst(设置与Tos值相同)，芯片工作状态，
- * @n OS引脚输出模式，故障队列。当温度超过阈值温度Tos时串口就会有信息提示，或者也可
+ * @brief High temperature alarm
+ * @n Experiment phenomenon: set the threshold temperature Tos and hysteresis temperature Thyst(should be equal to Tos) first.
+ * @n Set chip working state, OS pin output mode, fault queue, when the 当温度超过阈值温度Tos时串口就会有信息提示，或者也可
  * @n 以在arduino上加一个蜂鸣器来提醒温度超过阈值
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
