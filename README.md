@@ -1,7 +1,6 @@
 # DFRobot_LM75B
-The LM75B is a temperature-to-digital converter using an on-chip band gap temperature sensor and Sigma-Delta A-to-D conversion technique with an overtemperature output. It can be used to moniter the ambient temperature. The device also includes an open-drain output (OS) which becomes active when the temperature exceeds the programmed limits. <br>
-The LM75B can communicate with controllers via a 2-wire serial I2C-bus interface. There are three selectable logic addreses pins so that eight devices can be connected on the same bus without address conflict. <br>
-The LM75B can be configured for different operation conditions. It can be set in normal mode to periodically monitor the ambient temperature, or in shutdown mode to minimize power consumption. <br>
+The LM75B is a temperature-to-digital converter using an on-chip band gap temperature sensor and Sigma-Delta A-to-D conversion technique with an overtemperature output. It can be used to moniter the ambient temperature. The device also includes an open-drain output (OS) which becomes active when the temperature exceeds the programmed limits. The LM75B can communicate with controllers via a 2-wire serial I2C-bus interface. There are three selectable logic addreses pins so that eight devices can be connected on the same bus without address conflict. The LM75B can be configured for different operation conditions. It can be set in normal mode to periodically monitor the ambient temperature, or in shutdown mode to minimize power consumption. <br>
+
   Resolution: 0.125°C <br>
   Accuracy: ±2 °C <br>
   Power Consumption: operating current typically 200uA, power down mode 1.0uA <br>
@@ -23,9 +22,9 @@ The LM75B can be configured for different operation conditions. It can be set in
 ## Summary
 
    1.Read ambient temperature and the value will be printed in ℃ and ℉. <br>
-   2.Chip setting of serial print (chip operaton mode, OS polarity, OS output mode, 故障队列数,阈值温度,滞后限制温度)<br>
-   3.用户定义温度阈值，当温度超过阈值温度时，串口会有高温提示<br>
-   4.作为恒温器的监视装备，让设备的温度维持在自定义的阈值温度处<br>
+   2.Chip setting of serial print (chip operaton mode, OS polarity, OS output mode, the number of faults set in the queue, temperature threshold, hysteresis temperature limit). <br>
+   3.A high temperature warning will be shown on the serial port when the temperature exceeds user-defined temperature threshold.<br>
+   4.Use as a monitor device of thermostat to keep the temperature at a user-defined threshold point.<br>
 
 ## Installation
 
@@ -36,9 +35,9 @@ To use this library, first download the library file, paste it into the \Arduino
 ```C++
     
 /*!
- * @brief 构造函数
- * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire
- * @param addr 7位I2C地址,由前三位决定地址的值，取值(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F)默认0x48
+ * @brief Constructor
+ * @param pWire I2C bus pointer object, default Wire
+ * @param addr 7-bits I2C address, the address value is decided by the first three bits, get value (0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F) default 0x48
  * @n IIC地址由构成如下图所示
  *   6  5  4  3  2  1   0
      1  0  0  1  A2 A1  A0
