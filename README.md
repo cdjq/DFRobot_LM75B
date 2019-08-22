@@ -1,15 +1,14 @@
 # DFRobot_LM75B
-LM75B 是一个使用了内置带隙温度传感器和Σ-△模数转换技术的温度-数字转换器,能监测环境温度,当温度超过自定义的阈值时,<br>
-它会有一个过热检测输出(OS pin),并且可以防止噪音干扰<br>
-LM75B器件通过两线的串行IIC 总线接口与控制器通信,LM75B 有3个可选的逻辑地址管脚，使得同一总线上可同时连接8个器件而不发生地址冲突<br>
-LM75B 可配置成不同的工作模式。它可设置成在正常工作模式下周期性地对环境温度进行监控或进入关断模式(类似于待机状态)来将器件功耗降至最低.<br>
-  分辨率：0.125°C <br>
-  精度  ：正负 2 °C <br>
-  功耗  :工作电流典型值为200uA，掉电模式为1.0uA<br>
-  工作电压：2.8V～5.5V<br>
+The LM75B is a temperature-to-digital converter using an on-chip band gap temperature sensor and Sigma-Delta A-to-D conversion technique with an overtemperature output. It can be used to moniter the ambient temperature. The device also includes an open-drain output (OS) which becomes active when the temperature exceeds the programmed limits. <br>
+The LM75B can communicate with controllers via a 2-wire serial I2C-bus interface. There are three selectable logic addreses pins so that eight devices can be connected on the same bus without address conflict. <br>
+The LM75B can be configured for different operation conditions. It can be set in normal mode to periodically monitor the ambient temperature, or in shutdown mode to minimize power consumption. <br>
+  Resolution: 0.125°C <br>
+  Accuracy: ±2 °C <br>
+  Power Consumption: operating current typically 200uA, power down mode 1.0uA <br>
+  Operating Voltage: 2.8V～5.5V<br>
 ![正反面svg效果图](https://github.com/ouki-wang/DFRobot_Sensor/raw/master/resources/images/SEN0245svg1.png)
 
-## 产品链接（链接到英文商城）
+## Product Link（链接到英文商城）
     SKU：LM75B 温度传感器
    
 ## Table of Contents
@@ -23,8 +22,8 @@ LM75B 可配置成不同的工作模式。它可设置成在正常工作模式
 
 ## Summary
 
-   1.读取环境温度,会分别打印摄氏度和华氏度两种单位的温度值<br>
-   2.在串口打印芯片的设置(芯片工作模式,OS极性,OS输出模式,故障队列数,阈值温度,滞后限制温度)<br>
+   1.Read ambient temperature and the value will be printed in ℃ and ℉. <br>
+   2.Chip setting of serial print (chip operaton mode, OS polarity, OS output mode, 故障队列数,阈值温度,滞后限制温度)<br>
    3.用户定义温度阈值，当温度超过阈值温度时，串口会有高温提示<br>
    4.作为恒温器的监视装备，让设备的温度维持在自定义的阈值温度处<br>
 
