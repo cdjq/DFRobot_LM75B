@@ -118,11 +118,11 @@ void setTosF(float TosF);
  * @brief User-defined hysteresis temperature
  * @param Thyst Temperature, unit: °C, Thyst%0.5 == 0;
  * @n Detection range: -55°C to +125°C, Thyst must be less than Tos; 
- * @n User-defined hysteresis temperature; delay the level jump of OS, OS level will jump when the ambient temperature
- * @n is less than hysteresis value instead of threshold value. 
+ * @n User-defined hysteresis temperature; delay the level jump of OS, OS level will jump when the
+ * @n ambient temperature is less than hysteresis value instead of threshold value. 
  * @n Effect: when the temperature is more than threshold temperature, OS pin becomes active(default LOW) 
- * @n         When the temperature is less than threshold temperature, OS pin will not back to the normal state(default HIGH)
- * @n until the temperature value is less than the hysteresis tempreature.  
+ * @n         When the temperature is less than threshold temperature, OS pin will not back to the normal 
+ * @n state(default HIGH) until the temperature value is less than the hysteresis tempreature.  
  */
 void setHysteresisC(float Thyst);
 
@@ -143,8 +143,8 @@ eQueueValue_t getQueueValue();
  * @brief Set the value of fault queue
  * @param value eQueueValue_t type, represents the number of faluts set in the queue.
  * @n Set value to ：
- * @n Each time the temperature in the temperature register completes conversion, it will be automatically compared with
- * @n threshold and hysteresis temperature. 
+ * @n Each time the temperature in the temperature register completes conversion, it will be automatically
+ * @n compared with threshold and hysteresis temperature. 
  * @n eValue1, if temperature is more than threshold value once, OS output active state; 
  * @n eValue2, if two successive temperatures are more than threshold value, OS output active state; 
  * @n eValue3, if four successive temperatures are more than threshold value, OS output active state; 
@@ -207,8 +207,8 @@ micro:bit        |      √       |              |             |
 
 ## History
 
-- data 2019-7-31
-- version V0.1
+- Data 2019-7-31
+- Version V0.1
 
 
 ## Credits
