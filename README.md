@@ -42,7 +42,7 @@ To use this library, first download the library file, paste it into the \Arduino
  * @n IIC address is formed as the chart below 
  *   6  5  4  3  2  1   0
      1  0  0  1  A2 A1  A0
- * @n The definition of address is shown below, change the address via jumper: defaut 0x48
+ * @n The definition of address is shown below, change the address via jumper: default 0x48
      1  0  0  1  | A2 A1 A0
      1  0  0  1  | 1  1  1       0x4F
      1  0  0  1  | 1  1  0       0x4E
