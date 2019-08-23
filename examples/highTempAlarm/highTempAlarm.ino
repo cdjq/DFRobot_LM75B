@@ -3,7 +3,8 @@
  * @brief High temperature alarm
  * @n Experiment phenomenon: set the threshold temperature Tos and hysteresis temperature Thyst(should be equal to Tos) first.
  * @n Set chip working state, OS pin output mode, and fault queue. 
- * @n The serial port displays a high temperature alarm when the temperature exceeds threshold temperature Tos, or to add a buzzer on Arduino to warn High temperature.
+ * @n The serial port displays a high temperature alarm when the temperature exceeds threshold temperature Tos, or to add a buzzer
+ * @n on Arduino to warn High temperature.
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
