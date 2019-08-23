@@ -48,7 +48,7 @@ void loop(void) {
   /*!
    Set chip working mode 
    ShutDownMode value:
-   eNormal  In this mode, data acquisition cycle is 100ms, in which 10ms is used for data conversion and it needs 300uA current.
+   eNormal  In this mode, data acquisition cycle is 100ms, among which 10ms is used for data conversion and it needs 300uA current.
             The rest is in idle state and it needs 10uA.
    eShutdown In this mode, data acquisition stops, but IIC communication and register works normally.
   */
