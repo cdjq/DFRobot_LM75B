@@ -118,7 +118,7 @@ void setTosF(float TosF);
  * @brief User-defined hysteresis temperature
  * @param Thyst Temperature, unit: °C, Thyst%0.5 == 0;
  * @n Detection range: -55°C to +125°C, Thyst must be less than Tos; 
- * @n User-defined hysteresis temperature; delay the level jump of OS, OS level will jump when the
+ * @n User-defined hysteresis temperature; delay the level jump of OS: OS level will jump when the
  * @n ambient temperature is less than hysteresis value instead of threshold value. 
  * @n Effect: when the temperature is more than threshold temperature, OS pin becomes active(default LOW) 
  * @n         When the temperature is less than threshold temperature, OS pin will not back to the normal 
