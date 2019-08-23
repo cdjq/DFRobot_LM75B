@@ -38,7 +38,7 @@
 //Use this constructor function to define software IIC and change chip address. 
 //DFRobot_LM75B lm75b(&Wire, 0x48);
 DFRobot_LM75B lm75b; 
-//Connect OS pin to Arduino digital pin 2, monitor the level of OS pin via pin 4. 
+//Connect OS pin to Arduino digital pin 2, monitor the level of OS pin via pin 2. 
 #define OSPin   (2)
 
 void setup(void) {
