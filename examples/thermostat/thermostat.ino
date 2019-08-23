@@ -154,9 +154,9 @@ void loop(void) {
   Serial.print(/*Temperature=*/lm75b.getTemperatureC());
   Serial.println("°C");
   if((state == 0) && (thermostatState == true)){
-   Serial.println("降温阶段，将温度降至滞后温度以下");
+   Serial.println("Temperature reducing stage: reduce the temperature under hysteresis temperature");
   } 
   else if ((state == 1) && (thermostatState == true)) {
-   Serial.println("升温阶段，将温度升至阈值温度以上");
+   Serial.println("Temperature increasing stage: increase the temperature above threshold temperature");
   }
 }
