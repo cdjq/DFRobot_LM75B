@@ -1,7 +1,7 @@
 /*!
  * @file energySaving.ino
  * @brief Enter energy saving mode after the temperature is read; Back up to normal mode and continue to read temperature after 20s, and
- * @n enter to energy saving mode again, and so on. 
+ * @n enter energy saving mode again, and so on. 
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
