@@ -76,77 +76,79 @@ void setup(void) {
   /*!
     Set chip working mode 
     ShutDownMode Value: 
-    eNormal  在此模式下，数据采集周期为100ms,其中10ms用于数据转换，需要电流为300uA，另外90ms处于idle状态，需要电流为10uA
-    eShutdown 在此模式下，数据采集停止，但IIC通信不受影响，寄存器也可以正常读写
+    eNormal  In this mode, data acquisition cycle is 100ms, among which 10ms is used for data conversion and it needs 300uA current.
+            The rest is in idle state and it needs 10uA.
+    eShutdown In this mode, data acquisition stops, but IIC communication and register works normally.
   */
   lm75b.setShutDownMode(/*ShutDownMode=*/lm75b.eNormal);
   
   /*!
     The OS output active state can be selected as HIGH or LOW by programming bit B2
     (OS_POL) of register Conf
-     polarityMode的取值为：
-     eActive_LOW   在此模式下，OS的active状态为低电平
-     eActive_HIGH   在此模式下，OS的active状态为高电平
-    当温度值大于阈值温度，若满足则OS输出为active状态，active状态默认为低电平。
+     polarityMode Value: 
+     eActive_LOW   OS active state is LOW in this mode 
+     eActive_HIGH   OS active state is HIGH in this mode 
+     When temperature is more than threshold temperature, OS output is active state (defalut: LOW).
   */
   lm75b.setOSPolarityMode(/*polarityMode=*/lm75b.eActive_LOW);
   
   /*!
-    设置设置OS引脚的模式
-    OSMode的取值为：
-    eComparator   OS口输出采用比较器模式，OS becomes active when the Temp exceeds the Tth(ots), and is reset 
+    Set OS pin mode 
+    OSMode Value:
+    eComparator   In comparator mode, OS becomes active when the Temp exceeds the Tth(ots), and is reset 
                        when the Temp drops below the Thysh
-    eInterrupt    在此模式下，OS口输出采用中断模式,Once the OS output has been activated by crossing Tth(ots) 
+    eInterrupt    In interrupt mode, once the OS output has been activated by crossing Tth(ots) 
                        and then reset, it can be activated again only when the Temp drops below the Thys
   */
   lm75b.setOSMode(/*OSMode=*/lm75b.eComparator);
   
   /*!
-    只有满足故障队列数，OS才会产生中断
-    value的取值为：
-    温度寄存器存储的温度值在每次转换完成之后，会自动与阈值温度和滞后温度相比较。
-    eValue1，需满足一次温度值大于阈值温度。若满足则OS输出为active状态；
-    eValue2，需满足连续二次温度值大于阈值温度。若满足则OS输出为active状态。
-    eValue3，需满足连续四次次温度值大于阈值温度。若满足则OS输出为active状态。
-    eValue4，需满足连续六次温度值大于阈值温度。若满足则OS输出为active状态。
+    OS generates interrupt only when there is enough number of queue faults. 
+    value: 
+    Each time the temperature in the temperature register completes conversion, it will automatically
+    be compared with threshold and hystersis temperature. 
+    eValue1, if temperature is more than threshold value once, OS output active state; 
+    eValue2, if two successive temperatures are more than threshold value, OS output active state; 
+    eValue3, if four successive temperatures are more than threshold value, OS output active state; 
+    eValue4, if six successive temperatures are more than threshold value, OS output active state.
   */
   lm75b.setQueueValue(/*value=*/lm75b.eValue4);
   
-  //用户设定值，环境温度超出此值时引起OS状态改变
-  /*getTosC函数的作用时获取Tos寄存器里面存储的阈值大小，
+  //User-defined value, OS state changes when ambient temperature exceeds this value.
+  /*getTosC Get the threshold value stored in Tos register. 
   */
   Serial.println("**-----------------------------------------------------**");
-  Serial.print("阈值温度(摄氏度): ");
+  Serial.print("Threshold (degree Celsius): ");
   Serial.print(lm75b.getTosC());
   Serial.println("°C");
   /**
-   * @brief 获取阈值温度(Tos:Overtemperature shutdown).
-   * @return 返回温度值，单位是华氏度.
-   * @n 温度范围是 -67°F 到 +257°F.
+   * @brief Get threshold temperature(Tos:Overtemperature shutdown).
+   * @return Return temperature value, unit: °F 
+   * @n Detection range: -67°F to +257°F.
    */
-  //Serial.print("阈值温度(华氏度): ");
+  //Serial.print("Threshold (Fahrenheit): ");
   //Serial.print(lm75b.getTosF());
   //Serial.println("°F");
   Serial.println("**-----------------------------------------------------**");
 }
 
 void loop(void) {
-  //检测OS的状态来判断温度是否超过设定值
+  //Detect the OS state to check if the temperaure exceeds the pre-set value. 
    /*!
-    默认设置 device operation mode selection：(0*)normal
+    Default setiing device operation mode selection：(0*)normal
             OS operation mode selection    ：(0*)OS comparator
             OS polarity selection          ：(0*)OS active LOW
             OS fault queue programming     ：(00*)queue value = 1
             reserved                       ： 000*
   */
-  //因为 polarity 选择的是active LOW模式，所以当温度值大于阈值温度，OS输出为低电平
+  //Since polarity is set to active LOW mode, OS output LOW when temperature is over threshold. 
   while (digitalRead(OSPin) == 0) {
-    Serial.println("环境温度超过阈值温度，请注意");
+    Serial.println("Warning: Ambient temperature exceeds threshold vaule");
     delay(3000);
   }
-  Serial.print("环境温度: ");
-  /*getTempC 获取环境温度*/
-  Serial.print(/*温度=*/lm75b.getTemperatureC());
+  Serial.print("Ambient temperature: ");
+  /*getTempC Get ambient temperature */
+  Serial.print(/*Temperature=*/lm75b.getTemperatureC());
   Serial.println("°C");
   delay(3000);
 }
