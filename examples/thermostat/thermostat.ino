@@ -1,10 +1,9 @@
 /*!
  * @file thermostat.ino
- * @brief 恒温器，让目标设备保持在阈值温度处,温度变化的下限不能低于滞后限制温度.
- * @n 实验现象：在开始之前我们会设置阈值温度Tos(自定义的温度点)和滞后限制温度Thyst(自定义的温度点，小等于于阈值温度)
- * @n 而让温度保持在这个范围内。
- * @n 我们模拟外部环境，当串口打印超过阈值温度Tos时降温，在温度低于滞后限制温度Thyst时升温，达到
- * @n 一个恒温装置的效果
+ * @brief Thermostat, keep targeted device's temperature at threshold point. The minimum temperature should greater than hysteresis value. 
+ * @n Experiment phenomenon: set threshold temperature Tos and hysteresis temeperaure Thyst(≤ threshold), and keep temperature within the range.
+ * @n Simulate external environment: when serial print temperature exceeds Tos, lower the temperature; when less than Thyst, raise it. 
+ * @n
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -17,13 +16,14 @@
 #include <DFRobot_LM75B.h>
 
 /*!
- * @brief 构造函数
- * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire
- * @param addr 7位I2C地址,由前三位决定地址的值，取值(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F)默认0x48
- * @n IIC地址由构成如下图所示
+ * @brief Constructor
+ * @param pWire I2C bus pointer object, default Wire
+ * @param addr 7-bits I2C address, the address value is decided by the first three bits.
+ * @n Value(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F) default 0x48
+ * @n IIC address is formed as the chart below 
  *   6  5  4  3  2  1   0
      1  0  0  1  A2 A1  A0
- * @n 地址的定义如下表所示,可以通过跳线来改变地址：默认为0x48
+ * @n The definition of address is shown below, change the address via jumper: default 0x48
      1  0  0  1  | A2 A1 A0
      1  0  0  1  | 1  1  1       0x4F
      1  0  0  1  | 1  1  0       0x4E
@@ -34,7 +34,7 @@
      1  0  0  1  | 0  0  1       0x49
      1  0  0  1  | 0  0  0       0x48
 */
-//如果需要自己定义软IIC和改变芯片地址，便使用此构造函数
+//Use this constructor function to define software IIC and change chip address. 
 //DFRobot_LM75B lm75b(&Wire, 0x48);
 DFRobot_LM75B lm75b; 
 //OS引脚连接Arduino数字引脚2，通过引脚2监控OS脚的电平变化
