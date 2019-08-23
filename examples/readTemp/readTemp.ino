@@ -1,8 +1,9 @@
 /*!
  * @file readTemp.ino
- * @brief 读取环境温度.
- * @n 实验现象：我们在开始前读取一次芯片的设置，然后每隔一秒读取一次温度
- * @n 芯片内每100ms采集一次温度数据，读取温度和温度采集与转换并不相互影响.
+ * @brief Read ambient temperature
+ * @n Experiment phenomenon: read chip setting before starting, and then read temperature once per second.
+ * @n Chip collects temperature data every 100ms. 
+ * @n Reading temperature data does not affect the coversion and acquisition in progress during the read operation.
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -14,13 +15,14 @@
  */
 #include <DFRobot_LM75B.h>
 /*!
- * @brief 构造函数
- * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire
- * @param addr 7位I2C地址,由前三位决定地址的值，取值(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F)默认0x48
- * @n IIC地址由构成如下图所示
+ * @brief Constructor
+ * @param pWire I2C bus pointer object, default Wire
+ * @param addr 7-bits I2C address, the address value is decided by the first three bits.
+ * @n Value (0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F) default 0x48
+ * @n IIC address is formed as the chart below
  *   6  5  4  3  2  1   0
      1  0  0  1  A2 A1  A0
- * @n 地址的定义如下表所示,可以通过跳线来改变地址：默认为0x48
+ * @n The definition of address is shown below, change the address via jumper: default 0x48
      1  0  0  1  | A2 A1 A0
      1  0  0  1  | 1  1  1       0x4F
      1  0  0  1  | 1  1  0       0x4E
@@ -31,52 +33,52 @@
      1  0  0  1  | 0  0  1       0x49
      1  0  0  1  | 0  0  0       0x48
 */
-//如果需要自己定义软IIC和改变芯片地址，便使用此构造函数
+//Use this constructor function to define software IIC and change chip address. 
 //DFRobot_LM75B lm75b(&Wire, 0x48);
 DFRobot_LM75B lm75b; 
 
 void setup(void) {
   Serial.begin(115200);
-  //检测IIC是否能正常通信
+  //Detect if IIC communication works properly
   while (lm75b.begin() != 0) {
-    Serial.println("IIC初始化失败，请检测连线是否正确");
+    Serial.println("IIC init failed, please check if the connection is correct?");
     delay(1000);
   }
-  //芯片的设置在每次断电然后从新上电后都会重置
+  //Chip will be reset when repowered. 
   Serial.println("**--------------------the chip set----------------------**");
-  Serial.print("芯片工作模式: ");
+  Serial.print("Chip working mode: ");
   /**
-    正常模式：在此模式下，芯片正常工作，每100ms采集一次温度数据并存储到温度寄存器
-    关断模式：在此模式下，数据采集转换停止，但寄存器能正常读写.
+    Normal mode: chip works normally, and it collects temperature data every 100ms and store data to temperature register. 
+    Shutdown mode: data conversion disabled, but register read/write operation can be performed.
   */
   Serial.print(lm75b.getShutDownMode());
-  Serial.println(" (0:正常模式/1：关断模式)");
-  Serial.print("OS模式: ");
+  Serial.println(" (0:nomal mode/1：shutdown mode)");
+  Serial.print("OS mode: ");
   /**
-    比较器模式：此模式下，OS引脚在环境温度超过Tos设定温度时，产生低电平，然后在低于Thyst恢复高电平，然后一直循环.
-    中断模式：此模式下，OS在第一次环境温度超过Tos设定温度时被激活，然后产生一个脉冲信号，等到温度低于Thyst才会
-                 产生下一个脉冲信号，然后一直循环
+    Comparator mode: OS output becomes active when the temperature exceeds the Tos, and is reset when the temp drops below Thyst.
+    Interrupt mode: OS output is first activated only when the Temp exceeds the Tos and generates a pulse signal, and then remains.
+    It generates the next pulse signal only when the temperature is below Thyst, and so on. 
   */
   Serial.print(lm75b.getOSMode());
-  Serial.println(" (0:比较器模式/1：中断模式)");
+  Serial.println(" (0: comparator mode/1：shutdown mode)");
   /*!
     The OS output active state can be selected as HIGH or LOW by programming bit B2
     (OS_POL) of register Conf
-     eActive_LOW = 0,  <在此模式下，OS的active状态为低电平>
-     eActive_HIGH = 1  <在此模式下，OS的active状态为高电平>
-    当温度值大于阈值温度，则OS输出为active状态，active状态默认为低电平。
+     eActive_LOW = 0,  <OS active state is LOW in this mode>
+     eActive_HIGH = 1  <OS active state is HIGH in this mode>
+    When temperature is more than threshold temperature, OS output is active state (defalut: LOW).
   */
-  Serial.print("OS极性: ");
+  Serial.print("OS Polarity: ");
   Serial.print(lm75b.getOSPolarityMode());
-  Serial.println(" (0:active状态为低电平/1：active状态为高电平)");
+  Serial.println(" (0:active LOW/1：active HIGH)");
   /*!
-    只有满足故障队列数，OS才会产生中断
-    故障队列数：温度寄存器存储的温度值在每次转换完成之后，会自动与阈值温度和滞后温度相比较。
-    eValue1=1，需满足一次温度值大于阈值温度。若满足则OS输出为active状态；
-    eValue2=2，需满足连续二次温度值大于阈值温度。若满足则OS输出为active状态。
-    eValue3=4，需满足连续四次次温度值大于阈值温度。若满足则OS输出为active状态。
-    eValue4=6，需满足连续六次温度值大于阈值温度。若满足则OS输出为active状态。
-    以此类推。
+    OS generates interrupt only when there is enough number of queue faults.
+    Number of faults in the queue: Each time the temperature in the temperature register completes conversion, it will automatically
+    be compared with threshold and hystersis temperature. 
+    eValue1=1, if temperature is more than threshold value once, OS output active state;
+    eValue2=2, if two successive temperatures are more than threshold value, OS output active state; 
+    eValue3=4, if four successive temperatures are more than threshold value, OS output active state; 
+    eValue4=6, if six successive temperatures are more than threshold value, OS output active state.
    */
   Serial.print("OS故障队列: ");
   Serial.print(lm75b.getQueueValue());
