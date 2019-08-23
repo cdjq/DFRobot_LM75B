@@ -68,7 +68,8 @@ void setup(void) {
     @n         When the temperature is less than threshold temperature, OS pin will not back to the normal
     @n state(default HIGH) until the temperature value is less than the hysteresis tempreature. 
   */
-  // Set the hysteresis and the threshold temperature to the same value, when ambient temperature is more than or less than threshold value, OS pin will show different status, by which the high temperature detection can be realized.
+  // Set the hysteresis and the threshold temperature to the same value, when ambient temperature is more than or less than
+  // threshold value, OS pin will show different status, by which the high temperature detection can be realized.
   lm75b.setHysteresisC(/*Thyst=*/33);
   //Set hysteresis register to Fahrenheit 
   //lm75b.setHysteresisF(/*Thyst=*/91);
