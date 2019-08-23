@@ -2,8 +2,8 @@
  * @file highTempAlarm.ino
  * @brief High temperature alarm
  * @n Experiment phenomenon: set the threshold temperature Tos and hysteresis temperature Thyst(should be equal to Tos) first.
- * @n Set chip working state, OS pin output mode, fault queue, when the 当温度超过阈值温度Tos时串口就会有信息提示，或者也可
- * @n 以在arduino上加一个蜂鸣器来提醒温度超过阈值
+ * @n Set chip working state, OS pin output mode, and fault queue. 
+ * @n The serial port displays a high temperature alarm when the temperature exceeds threshold temperature Tos, or to add a buzzer on Arduino to warn High temperature.
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -16,13 +16,14 @@
 #include <DFRobot_LM75B.h>
 
 /*!
- * @brief 构造函数
- * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire
- * @param addr 7位I2C地址,由前三位决定地址的值，取值(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F)默认0x48
- * @n IIC地址由构成如下图所示
+ * @brief Constructor
+ * @param pWire I2C bus pointer object, default Wire
+ * @param addr 7-bits I2C address, the address value is decided by the first three bits.
+ * @n Value(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F) default 0x48
+ * @n IIC address is formed as the chart below 
  *   6  5  4  3  2  1   0
      1  0  0  1  A2 A1  A0
- * @n 地址的定义如下表所示,可以通过跳线来改变地址：默认为0x48
+ * @n The definition of address is shown below, change the address via jumper: default 0x48
      1  0  0  1  | A2 A1 A0
      1  0  0  1  | 1  1  1       0x4F
      1  0  0  1  | 1  1  0       0x4E
@@ -33,46 +34,48 @@
      1  0  0  1  | 0  0  1       0x49
      1  0  0  1  | 0  0  0       0x48
 */
-//如果需要自己定义软IIC和改变芯片地址，便使用此构造函数
+//Use this constructor function to define software IIC and change chip address. 
 //DFRobot_LM75B lm75b(&Wire, 0x48);
 DFRobot_LM75B lm75b; 
-//OS引脚连接Arduino数字引脚2，通过引脚4监控OS脚的电平变化
+//Connect OS pin to Arduino digital pin 2, monitor the level of OS pin via pin 4. 
 #define OSPin   (2)
 
 void setup(void) {
   Serial.begin(115200);
-  //检测IIC是否能正常通信.
+  //Detect if IIC communication works properly
   while (lm75b.begin() != 0) {
-    Serial.println("IIC初始化失败，请检测连线是否正确");
+    Serial.println("IIC init failed, please check if the connection is correct?");
     delay(1000);
   }
   pinMode(OSPin, INPUT);
   
   /**
-    @brief 设置阈值温度(Tos:Overtemperature shutdown)
-    @param 温度值，单位是摄氏度，需满足Tos%0.5 == 0 ；
-    @n 范围是 -55°C 到 +125°C
+    @brief Set threshold temperaure (Tos:Overtemperature shutdown)
+    @param Temperature value, unit: °C, Tos%0.5 == 0;
+    @n Detection range: -55°C to +125°C
   */
   lm75b.setTosC(/*Tos=*/33);
-  //使用华氏度对阈值寄存器设置    
+  //Set threshold register to Fahrenheit     
   //lm75b.setTosF(/*Tos=*/91);
   /**
-    @brief setHysteresisC自定义滞后温度的大小
-    @param 温度值，单位是摄氏度，需满足Thyst%0.5 == 0 ；
-    @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
-    @n 用户设定的滞后温度，会让OS电平的跳变从环境温度小于阈值温度时跳变滞后到小于滞后限制温度时跳变.
-    @n 滞后限制温度产生的效果：当温度大于阈值温度时，OS Pin 变为活跃状态(默认为低电平)，当温度小于阈
-    @n 值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 
+    @brief setHysteresisC Set hysteresis temperature 
+    @param Temperature, unit: °C, Thyst%0.5 == 0;
+    @n Detection range: -55°C to +125°C, Thyst must be less than Tos 
+    @n User-defined hysteresis temperature; delay the level jump of OS: OS level will jump when the
+    @n ambient temperature is less than hysteresis value instead of threshold value.
+    @n Effect: when the temperature is more than threshold temperature, OS pin becomes active(default LOW)
+    @n         When the temperature is less than threshold temperature, OS pin will not back to the normal
+    @n state(default HIGH) until the temperature value is less than the hysteresis tempreature. 
   */
-  //将滞后温度和阈值温度设置相同，那么就在超过阈值温度时OS的状态和低于阈值温度时的状态不一样，就可以做到超温检测.
+  // Set the hysteresis and the threshold temperature to the same value, when ambient temperature is more than or less than threshold value, OS pin will show different status, by which the high temperature detection can be realized.
   lm75b.setHysteresisC(/*Thyst=*/33);
-  //使用华氏度对滞后寄存器设置
+  //Set hysteresis register to Fahrenheit 
   //lm75b.setHysteresisF(/*Thyst=*/91);
   
   
   /*!
-    设置芯片工作模式
-    ShutDownMode的取值为：
+    Set chip working mode 
+    ShutDownMode Value: 
     eNormal  在此模式下，数据采集周期为100ms,其中10ms用于数据转换，需要电流为300uA，另外90ms处于idle状态，需要电流为10uA
     eShutdown 在此模式下，数据采集停止，但IIC通信不受影响，寄存器也可以正常读写
   */
