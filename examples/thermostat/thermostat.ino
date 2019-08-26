@@ -1,7 +1,7 @@
 /*!
  * @file thermostat.ino
- * @brief Thermostat, keep targeted device's temperature at threshold point. The minimum temperature should greater than hysteresis value. 
- * @n Experiment phenomenon: set threshold temperature Tos and hysteresis temeperaure Thyst(≤ threshold), and keep temperature within the range.
+ * @brief Thermostat, keep targeted device's temperature at threshold point. The minimum temperature should be greater than hysteresis value. 
+ * @n Experiment phenomenon: set threshold temperature Tos and hysteresis temeperaure Thyst(≤ threshold), and keep the temperature within the range.
  * @n Simulate external environment: when serial print temperature exceeds Tos, lower the temperature; when less than Thyst, raise it. 
  * @n
  *
@@ -90,10 +90,10 @@ void setup(void) {
     value: 
     Each time the temperature in the temperature register completes conversion, it will automatically
     be compared with threshold and hystersis temperature. 
-    eValue1, if temperature is more than threshold value once, OS output active state; 
-    eValue2, if two successive temperatures are more than threshold value, OS output active state; 
-    eValue3, if four successive temperatures are more than threshold value, OS output active state; 
-    eValue4, if six successive temperatures are more than threshold value, OS output active state.
+    eValue1, if one temperature vlaue is more than threshold value, OS output active state; 
+    eValue2, if two successive temperature values are more than threshold value, OS output active state; 
+    eValue3, if four successive temperature values are more than threshold value, OS output active state; 
+    eValue4, if six successive temperature values are more than threshold value, OS output active state.
   */
   lm75b.setQueueValue(/*value=*/lm75b.eValue4);
   
