@@ -78,8 +78,8 @@ void setup(void) {
   /*!
     Set chip working mode 
     ShutDownMode Value: 
-    eNormal  In this mode, data acquisition cycle is 100ms, among which 10ms is used for data conversion and it needs 300uA current.
-            The rest is in idle state and it needs 10uA.
+    eNormal  In this mode, data acquisition cycle is 100ms, among which 10ms is used for data conversion and needs 300uA current.
+            The rest is in idle state and needs 10uA.
     eShutdown In this mode, data acquisition stops, but IIC communication and register works normally.
   */
   lm75b.setShutDownMode(/*ShutDownMode=*/lm75b.eNormal);
@@ -109,10 +109,10 @@ void setup(void) {
     value: 
     Each time the temperature in the temperature register completes conversion, it will automatically
     be compared with threshold and hystersis temperature. 
-    eValue1, if temperature is more than threshold value once, OS output active state; 
-    eValue2, if two successive temperatures are more than threshold value, OS output active state; 
-    eValue3, if four successive temperatures are more than threshold value, OS output active state; 
-    eValue4, if six successive temperatures are more than threshold value, OS output active state.
+    eValue1, if one temperature value is more than threshold value, OS output active state; 
+    eValue2, if two successive temperature values are more than threshold value, OS output active state; 
+    eValue3, if four successive temperature values are more than threshold value, OS output active state; 
+    eValue4, if six successive temperature values are more than threshold value, OS output active state.
   */
   lm75b.setQueueValue(/*value=*/lm75b.eValue4);
   
