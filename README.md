@@ -145,10 +145,10 @@ eQueueValue_t getQueueValue();
  * @n Set value to ：
  * @n Each time the temperature in the temperature register completes conversion, it will be automatically
  * @n compared with threshold and hysteresis temperature. 
- * @n eValue1, if temperature is more than threshold value once, OS output active state; 
- * @n eValue2, if two successive temperatures are more than threshold value, OS output active state; 
- * @n eValue3, if four successive temperatures are more than threshold value, OS output active state; 
- * @n eValue4, if six successive temperatures are more than threshold value, OS output active state.
+ * @n eValue1, if one temperature value is more than threshold value, OS output active state; 
+ * @n eValue2, if two successive temperature values are more than threshold value, OS output active state; 
+ * @n eValue3, if four successive temperature values are more than threshold value, OS output active state; 
+ * @n eValue4, if six successive temperature values are more than threshold value, OS output active state.
  */
 void setQueueValue(eQueueValue_t value);
 
