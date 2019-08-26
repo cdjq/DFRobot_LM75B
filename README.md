@@ -21,10 +21,10 @@ The LM75B is a temperature-to-digital converter using an on-chip band gap temper
 
 ## Summary
 
-   1.Read ambient temperature and the value will be printed in ℃ and ℉. <br>
-   2.Chip setting of serial print (chip operaton mode, OS polarity, OS output mode, the number of faults set in the queue, temperature threshold, hysteresis temperature). <br>
-   3.A high temperature alarm will be shown on the serial port when the temperature exceeds user-defined temperature threshold.<br>
-   4.Use as a monitor device of thermostat to keep the temperature at a user-defined threshold point.<br>
+   1. Read ambient temperature and the value will be printed in ℃ and ℉. <br>
+   2. Chip setting of serial print (chip operaton mode, OS polarity, OS output mode, the number of faults set in the queue, temperature threshold, hysteresis temperature). <br>
+   3. A high temperature alarm will be shown on the serial port when the temperature exceeds user-defined temperature threshold.<br>
+   4. Use as a monitor device of thermostat to keep the temperature at a user-defined threshold point.<br>
 
 ## Installation
 
