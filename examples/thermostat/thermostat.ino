@@ -1,8 +1,8 @@
 /*!
  * @file thermostat.ino
- * @brief Thermostat, keep targeted device's temperature at threshold point. The minimum temperature should be greater than hysteresis value. 
+ * @brief Thermostat, keep a targeted device's temperature at threshold point. 
  * @n Experiment phenomenon: set threshold temperature Tos and hysteresis temeperaure Thyst(≤ threshold), and keep the temperature within the range.
- * @n Simulate external environment: when serial print temperature exceeds Tos, lower the temperature; when less than Thyst, raise it. 
+ * @n Simulate external environment: when serial print temperature exceeds Tos, lower the temperature; when less than Thyst, raise the tempertaure. 
  * @n
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
@@ -49,7 +49,7 @@ volatile bool thermostatState = false;
 */
 void thermostat(){
   //Since polarity is set to active LOW mode, OS output LOW when temperature is over threshold
-  //Define the constant temperature point at threshold point, the minimum changing temperature should be greater than hysteresis value.
+  //Define the constant temperature point at threshold point.
   state = 1 - state;
   //Start thermostatic regulation 
   thermostatState = true;
@@ -79,7 +79,7 @@ void setup(void) {
    @n User-defined hysteresis temperature; delay the level jump of OS: OS level will jump when the
    @n ambient temperature is less than hysteresis value instead of threshold value.
    @n Effect: when the temperature is more than threshold temperature, OS pin becomes active(default LOW)
-   @n         When the temperature is less than threshold temperature, OS pin will not back to the normal
+   @n         When the temperature is less than threshold temperature, OS pin will not go back to the normal
    @n state(default HIGH) until the temperature value is less than the hysteresis tempreature. 
   */
   lm75b.setHysteresisC(/*Thyst=*/32);
@@ -146,8 +146,8 @@ void loop(void) {
             OS fault queue programming     ：(00*)queue value = 1
             reserved                       ： 000*
   */
-  //Since polarity is set to active LOW mode, OS output LOW when temperature is over threshold
-  //Define the constant temperature point at threshold point, the minimum changing temperature should be greater than hysteresis value.
+  //Since polarity is selected to active LOW mode, OS output LOW when temperature is over threshold
+  //Define the constant temperature point at threshold point.
   delay(2000);
   Serial.print("Ambient Temperature: ");
   /*getTempC Get ambient temperature*/
