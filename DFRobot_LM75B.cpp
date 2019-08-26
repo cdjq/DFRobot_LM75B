@@ -1,6 +1,6 @@
 /*!
  * @file DFRobot_LM75B.h
- * @brief 定义DFRobot_LM75B 类的基础结构，基础方法的实现
+ * @brief Define the basic function of class DFRobot_LM75B.
  * 
  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -39,7 +39,7 @@ float DFRobot_LM75B::getTemperatureC()
   uint16_t temp = 0;
   uint8_t buffer[2] = {0};
   readReg(REG_LM75B_TEMP, buffer, 2);
-  //首先判断读到的温度数据是正是负.
+  //Judge the read temperature data is negative or positive first. 
   if ((buffer[0] & 1024) == 0) {
     temp = buffer[0] << 8;
     temp = temp | buffer[1];
@@ -56,7 +56,7 @@ float DFRobot_LM75B::getTemperatureC()
 
 void DFRobot_LM75B::setTosC(float Tos) 
 { 
-  // 阈值的范围不能在温度测量范围之外
+  // The threshold range should be within the detection range.
   if(Tos > 125.0)
     Tos = 125.0;
   else if(Tos < -55.0)
@@ -84,7 +84,7 @@ void DFRobot_LM75B::setHysteresisF(float ThystF)
 }
 void DFRobot_LM75B::setHysteresisC(float Thyst) 
 { 
-  // 滞后值的范围不能在温度测量范围之外
+  // The hysteresis range should be within the detection range. 
   if(Thyst > 125.0)
     Thyst = 125.0;
   else if(Thyst < -55.0)
@@ -106,7 +106,7 @@ float DFRobot_LM75B::getTosC(void )
   uint16_t Tos = 0;
   uint8_t buffer[2] = {0};
   readReg(REG_LM75B_TOS, buffer, 2);
-    //首先判断读到的温度数据是正是负.
+    //Judge the read temperature data is negative or positive first. 
   if ((buffer[0] & 0x80) == 0) {
     Tos = buffer[0];
     Tos = Tos << 1 ;
@@ -132,7 +132,7 @@ float DFRobot_LM75B::getHysteresisC()
   uint16_t Thyst = 0;
   uint8_t buffer[2] = {0};
   readReg(REG_LM75B_THYST, buffer, 2);
-    //首先判断读到的温度数据是正是负.
+    //Judge the read temperature data is negative or positive first.
   if ((buffer[0] & 0x80) == 0) {
     Thyst = buffer[0];
     Thyst = Thyst << 1 ;
@@ -187,10 +187,10 @@ void DFRobot_LM75B::setOSMode(eOSMode_t osMode)
 {
   DFRobot_LM75B::sMode_t configuration;
   readReg(REG_LM75B_CONF,&configuration, 1);
-  //先读取此时conf寄存器里面的值
-  //将OS模式代表的位的数值改变成osMode.
+  //Read the value in conf register first
+  //Change vaule of bit OS mode represents into osMode.
   configuration.OS_COMP_INT = osMode;
-  //将改好的配置写入conf寄存器.
+  //Write the changed setting into conf register.
   writeReg(REG_LM75B_CONF, &configuration, 1);
 }
 
@@ -198,7 +198,7 @@ DFRobot_LM75B::eShutDownMode_t DFRobot_LM75B::getShutDownMode()
 {
   uint8_t buffer[1] = {0};
   readReg(REG_LM75B_CONF, buffer, 1);
-  //将寄存器内代表hutDown模式的位的数据提取出来
+  //Extract the date of bit representing hutDown mode from the register.
   return (DFRobot_LM75B::eShutDownMode_t)(buffer[0] & 0x01);
 }
 
