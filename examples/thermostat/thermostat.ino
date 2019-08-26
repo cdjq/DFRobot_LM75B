@@ -49,7 +49,7 @@ volatile bool thermostatState = false;
 */
 void thermostat(){
   //Since polarity is set to active LOW mode, OS output LOW when temperature is over threshold
-  //Define the constant temperature point at threshold point, the minimum temperature should be greater than hysteresis value.
+  //Define the constant temperature point at threshold point, the minimum changing temperature should be greater than hysteresis value.
   state = 1 - state;
   //Start thermostatic regulation 
   thermostatState = true;
@@ -75,7 +75,7 @@ void setup(void) {
    @brief Defien hysteresis temperature 
    @param  Temperature, unit: °C, Thyst%0.5 == 0;
    @n Detection range: -55°C to +125°C, Thyst must be smaller than Tos;
-   @n The pre-set temeprature should approach threshold temeprature so as to control temperature accurately. 
+   @n The pre-set temperature should approach threshold temperature so as to control temperature accurately. 
    @n User-defined hysteresis temperature; delay the level jump of OS: OS level will jump when the
    @n ambient temperature is less than hysteresis value instead of threshold value.
    @n Effect: when the temperature is more than threshold temperature, OS pin becomes active(default LOW)
@@ -147,7 +147,7 @@ void loop(void) {
             reserved                       ： 000*
   */
   //Since polarity is set to active LOW mode, OS output LOW when temperature is over threshold
-  //Define the constant temperature point at threshold point, the minimum temperature should be greater than hysteresis value.
+  //Define the constant temperature point at threshold point, the minimum changing temperature should be greater than hysteresis value.
   delay(2000);
   Serial.print("Ambient Temperature: ");
   /*getTempC Get ambient temperature*/
