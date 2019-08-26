@@ -1,9 +1,11 @@
 /*!
  * @file thermostat.ino
  * @brief Thermostat, keep a targeted device's temperature at threshold point. 
- * @n Experiment phenomenon: set threshold temperature Tos and hysteresis temeperaure Thyst(≤ threshold), and keep the temperature within the range.
- * @n Simulate external environment: when serial print temperature exceeds Tos, lower the temperature; when less than Thyst, raise the tempertaure. 
- * @n
+ * @n Experiment phenomenon: set threshold temperature Tos and hysteresis temeperaure Thyst(≤ threshold), and keep
+ * @n the temperature within the range.
+ * @n Simulate external environment: when serial print temperature exceeds Tos, lower the temperature; when less than Thyst, 
+ * @n raise the tempertaure. 
+ * @n 
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
