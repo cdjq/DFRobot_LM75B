@@ -154,9 +154,9 @@ void loop(void) {
   Serial.print(/*Temperature=*/lm75b.getTemperatureC());
   Serial.println("°C");
   if((state == 0) && (thermostatState == true)){
-   Serial.println("Temperature reducing stage: reduce the temperature under hysteresis temperature");
+   Serial.println("Temperature reducing stage: reduce the temperature under hysteresis temperature to activate the sensor to make reaction");
   } 
   else if ((state == 1) && (thermostatState == true)) {
-   Serial.println("Temperature increasing stage: increase the temperature above threshold temperature");
+   Serial.println("Temperature increasing stage: increase the temperature above threshold temperature to activate the sensor to make reaction");
   }
 }
