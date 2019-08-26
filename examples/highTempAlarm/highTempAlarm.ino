@@ -1,6 +1,6 @@
 /*!
  * @file highTempAlarm.ino
- * @brief High temperature alarm
+ * @brief High Temperature Alarm
  * @n Experiment phenomenon: set the threshold temperature Tos and hysteresis temperature Thyst(should be equal to Tos) first.
  * @n Set chip working state, OS pin output mode, and fault queue. 
  * @n The serial port displays a high temperature alarm when the temperature exceeds threshold temperature Tos, or to add a buzzer
@@ -143,7 +143,7 @@ void loop(void) {
             OS fault queue programming     ：(00*)queue value = 1
             reserved                       ： 000*
   */
-  //Since polarity is set to active LOW mode, OS output LOW when temperature is over threshold. 
+  //Since polarity is selected to active LOW mode, OS output LOW when temperature is over threshold. 
   while (digitalRead(OSPin) == 0) {
     Serial.println("Warning: Ambient temperature exceeds threshold vaule");
     delay(3000);
