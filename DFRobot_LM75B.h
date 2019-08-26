@@ -1,7 +1,7 @@
 /*!
  * @file DFRobot_LM75B.h
- * @brief 定义DFRobot_LM75B 类的基础结构
- * @n 这是一个数字温度传感器的库，用来读取环境温度
+ * @brief Define the basic structure of class DFRobot_LM75B.
+ * @n This is a temperature sensor library for reading ambient temperature. 
  *
  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -38,9 +38,9 @@ class DFRobot_LM75B {
 
 public:
 
-#define ERR_OK             0      //无错误
-#define ERR_DATA_BUS      -1      //数据总线错误
-#define ERR_IC_VERSION    -2      //芯片版本不匹配
+#define ERR_OK             0      //OK
+#define ERR_DATA_BUS      -1      //Data Bus error
+#define ERR_IC_VERSION    -2      //Chip version mismatch 
 
   /*!
        The Configuration register (Conf) is a write/read register and contains an 8-bit
@@ -51,7 +51,7 @@ public:
    ------------------------------------------------------------------------------------------
    |            reserved            |       OS_F_QUE      |   OS_POL |OS_COMP_INT|SHUTDOWN  |
    ------------------------------------------------------------------------------------------
-   默认设置  device operation mode selection：(0*)normal
+   Default setting  device operation mode selection：(0*)normal
              OS operation mode selection    ：(0*)OS comparator
              OS polarity selection          ：(0*)OS active LOW
              OS fault queue programming     ：(00*)queue value = 1
@@ -71,8 +71,9 @@ public:
    register Conf. 
    */
   typedef enum {
-    eNormal = 0, /**<在此模式下，数据采集周期为100ms,其中10ms用于数据转换，需要电流为200uA，另外90ms处于idle状态，需要电流为10uA>**/
-    eShutdown = 1 /**<在此模式下，数据采集停止，但IIC通信不受影响，寄存器也可以正常读写>**/
+    eNormal = 0, /**<In this mode, data acquisition cycle is 100ms, among which 10ms is used for data comversion and needs 200uA current, 
+  the rest 90ms is in idle state and needs 10uA>**/
+    eShutdown = 1 /**<In this mode, data acquisition, but IIC communication and register works normally.>**/
   } eShutDownMode_t;
   /*!
          The main difference between the two modes is that in OS comparator mode, the OS
@@ -84,16 +85,16 @@ public:
     by programming bit B1 (OS_COMP_INT) of register Conf.
   */
   typedef enum {
-    eComparator = 0x00, /**<在此模式下，OS口输出采用比较器模式，>**/
-    eInterrupt = 0x01 /**<在此模式下，OS口输出采用中断模式>**/
+    eComparator = 0x00, /**<OS output adopts comparator mode>**/
+    eInterrupt = 0x01 /**<OS output adopts interrupt mode>**/
   } eOSMode_t;
   /*!
          The OS output active state can be selected as HIGH or LOW by programming bit B2
     (OS_POL) of register Conf
   */
   typedef enum {
-    eActive_LOW = 0,  /**<在此模式下，OS的active状态为低电平>**/
-    eActive_HIGH = 1  /**<在此模式下，OS的active状态为高电平>**/
+    eActive_LOW = 0,  /**<OS active state is LOW in this mode>**/
+    eActive_HIGH = 1  /**<OS actie state is HIGH in this mode>**/
   } eOSPolarityMode_t;
   /*!
          It is provided to avoid false tripping due to noise.fault queue is also defined as the number of
@@ -101,21 +102,22 @@ public:
     the two bits B4 and B3 (OS_F_QUE[1:0]) in register Conf.
   */
   typedef enum {
-    eValue1 = 1,/**<在此模式下，故障队列数为 1>**/
-    eValue2 = 2,/**<在此模式下，故障队列数为 2>**/
-    eValue3 = 4,/**<在此模式下，故障队列数为 4>**/
-    eValue4 = 6 /**<在此模式下，故障队列数为 6>**/
+    eValue1 = 1,/**<Fault queue value is 1 >**/
+    eValue2 = 2,/**<Fault queue value is 2>**/
+    eValue3 = 4,/**<Fault queue value is 4>**/
+    eValue4 = 6 /**<Fault queue value is 6>**/
   } eQueueValue_t;
   
 public:
   /*!
-   * @brief 构造函数
-   * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire
-   * @param addr 7位I2C地址,由前三位决定地址的值，取值(0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F)默认0x48
-   * @n IIC地址由构成如下图所示
+   * @brief Constructor 
+   * @param pWire I2C bus pointer object, default Wire
+   * @param addr 7-bits I2C address, the address value is decided by the first three bits.
+   * @n Value (0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F) default 0x48
+   * @n IIC address is formed as the chart below
    *   6  5  4  3  2  1   0
        1  0  0  1  A2 A1  A0
-   * @n 地址的定义如下表所示,可以通过跳线来改变地址：默认为0x48
+   * @n The definition of address is shown below, change the address via jumper: default 0x48
        1  0  0  1  | A2 A1 A0
        1  0  0  1  | 1  1  1       0x4F
        1  0  0  1  | 1  1  0       0x4E
@@ -129,157 +131,160 @@ public:
   DFRobot_LM75B(TwoWire *pWire = &Wire, uint8_t address = 0x48); 
 
   /**
-   * @brief 初始化函数
-   * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
+   * @brief init function
+   * @return Return 0 if the initialization succeeds, otherwise return non-zero and error code.
    */
   int begin();
   
   /**
-   * @brief 获取环境温度值.
-   * @return 返回环境温度值，单位是华氏度.
-   * @n 可以检测的温度范围是 -67°F 到 +257°F
+   * @brief Get ambient temperature value 
+   * @return Return ambient temperature value, unit: °F
+   * @n Detection range: -67°F to +257°F
    */
   float getTemperatureF();
   /**
-   * @brief 获取环境温度值.
-   * @return 返回环境温度值，单位是摄氏度.
-   * @n 可以检测的温度范围是 -55°C 到 +125°C
+   * @brief Get ambient temperature value
+   * @return Return ambient temperature, unit: °C
+   * @n Detection range: -55°C to +125°C
    */
   float getTemperatureC();
   
   /**
-   * @brief 获取阈值温度(Tos:Overtemperature shutdown).
-   * @return 返回温度值，单位是摄氏度.
-   * @n 温度值范围是 -55°C 到 +125°C.
+   * @brief Get threshold temperature (Tos:Overtemperature shutdown).
+   * @return Return temperature, unit: °C
+   * @n Detection range: -55°C to +125°C
    */
   float getTosC(void );
   
   /**
-   * @brief 获取阈值温度(Tos:Overtemperature shutdown).
-   * @return 返回温度值，单位是华氏度.
-   * @n 温度范围是 -67°F 到 +257°F.
+   * @brief Get threshold temperature(Tos:Overtemperature shutdown).
+   * @return Return temperature, unit: °F
+   * @n Detection range: -67°F to +257°F
    */
   float getTosF(void );
   
   /**
-   * @brief 获取滞后限制温度(自定义的温度点，小等于于阈值温度)..
-   * @return 返回温度值，单位是摄氏度.
-   * @n 温度值范围是 -55°C 到 +125°C.
+   * @brief Get hysteresis temperature (user-defined temperature point, ≤ threshold temperature)..
+   * @return Return temperature, unit: °C
+   * @n Detection range: -55°C to +125°C.
    */
   float getHysteresisC();
   
   /**
-   * @brief 获取滞后限制温度(自定义的温度点，小等于于阈值温度)..
-   * @return 返回温度值，单位是华氏度.
-   * @n 温度范围是 -67°F 到 +257°F.
+   * @brief Get hysteresis temperature (user-defined temperature point,  ≤ threshold temperature)..
+   * @return Return temperature, unit: °F 
+   * @n Detection range: -67°F to +257°F
    */
   float getHysteresisF();
   
   /**
-   * @brief 设置阈值温度(自定义的温度点)
-   * @param Tos 温度值，单位是摄氏度，需满足Tos% 0.5 == 0 ；
-   * @n 范围是 -55°C 到 +125°C
+   * @brief Set threshold temperature (user-defined temperature point)
+   * @param Tos Temperature value, unit: °C, Tos% 0.5 == 0 ；
+   * @n Detection range: -55°C to +125°C
    */
   void setTosC(float Tos);
   /**
-   * @brief 设置阈值温度(自定义的温度点)
-   * @param Tos 温度值，单位是华氏度，需满足Tos% 0.5 == 0 ；
-   * @n 温度范围是 -67°F 到 +257°F
+   * @brief Set threshold temperature (User-defined temperature point)
+   * @param Tos Temperature, unit: °F, Tos% 0.5 == 0 ；
+   * @n Detection range: -67°F to +257°F
    */
   void setTosF(float TosF);
   /**
-   * @brief 自定义滞后限制温度
-   * @param Thyst 温度值，单位是摄氏度(°C)，需满足Thyst%0.5 == 0 ；
-   * @n 范围是 -55°C 到 +125°C,Thyst 必须小于等于 Tos 的值.
-   * @n 用户设定的滞后温度，会让OS电平的跳变从环境温度小于阈值温度延迟到小于滞后限制温度时再跳变.
-   * @n 滞后限制温度产生的效果：当温度大于阈值温度时，OS Pin 变为活跃状态(默认为低电平)，当温度小于阈
-   * @n 值温度时，OS Pin状态不会立即恢复正常状态(默认为高电平)，而是会延迟到小于滞后温度时才会恢复正常状态 
+   * @brief User-defined hysteresis temperature
+   * @param Thyst Temperature, unit: °C, Thyst%0.5 == 0;
+   * @n Detection range: -55°C to +125°C, Thyst must be less than Tos;
+   * @n User-defined hysteresis temperature; delay the level jump of OS: OS level will jump when the
+   * @n ambient temperature is less than hysteresis value instead of threshold value. 
+   * @n Effect: when the temperature is more than threshold temperature, OS pin becomes active(default LOW) 
+   * @n         When the temperature is less than threshold temperature, OS pin will not back to the normal 
+   * @n state(default HIGH) until the temperature value is less than the hysteresis tempreature.  
    */
   void setHysteresisC(float Thyst);
   
   /**
-   * @brief 自定义滞后限制温度
-   * @param Thyst 温度值，单位是华氏度(°F)，需满足Thyst%0.5 == 0 ；
-   * @n 温度范围是 -67°F 到 +257°F,Thyst 必须小于等于 Tos 的值.
+   * @brief User-defined hysteresis temperature 
+   * @param Thyst Temperature, unit: °F, Thyst%0.5 == 0 ；
+   * @n Detection range: -67°F to +257°F, Thyst must be less than Tos
    */
   void setHysteresisF(float ThystF);
   
   /**
-   * @brief 获取故障队列的值.
-   * @return 返回故障队列的值.
+   * @brief Get fault queue value
+   * @return Return fault queue value
    */
   eQueueValue_t getQueueValue();
   
   /**
-   * @brief 设置故障队列的值.
-   * @param value eQueueValue_t类型的值，代表故障队列数
-   * @n value的取值为：
-   * @n 温度寄存器存储的温度值在每次转换完成之后，会自动与阈值温度和滞后温度相比较。
-   * @n eValue1，需满足一次温度值大于阈值温度。若满足则OS输出为active状态；
-   * @n eValue2，需满足连续二次温度值大于阈值温度。若满足则OS输出为active状态。
-   * @n eValue3，需满足连续四次次温度值大于阈值温度。若满足则OS输出为active状态。
-   * @n eValue4，需满足连续六次温度值大于阈值温度。若满足则OS输出为active状态。
+   * @brief Set the value of fault queue
+   * @param value eQueueValue_t type, represents the number of faluts set in the queue.
+   * @n value：
+   * @n Each time the temperature in the temperature register completes conversion, it will be automatically
+   * @n compared with threshold and hysteresis temperature. 
+   * @n eValue1, if one temperature value is more than threshold value, OS output active state; 
+   * @n eValue2, if two successive temperature values are more than threshold value, OS output active state; 
+   * @n eValue3, if four successive temperature values are more than threshold value, OS output active state; 
+   * @n eValue4, if six successive temperature values are more than threshold value, OS output active state.
    */
   void setQueueValue(eQueueValue_t value);
   
   /**
-   * @brief 得到芯片的工作模式的模式.
-   * @return 0或1 .
-   * @n 0：Normal(正常模式)
-   * @n 1：interrupt(关断模式)
+   * @brief Get chip working mode
+   * @return 0 or 1 
+   * @n 0：Normal(normal mode)
+   * @n 1：interrupt(shut down mode)
    */
   eShutDownMode_t getShutDownMode();
   
   /**
-   * @brief 设置芯片的工作模式.
-   * @param ShutDownMode eQueueValue_t类型的值，代表芯片工作模式
+   * @brief Set chip working mode
+   * @param ShutDownMode eQueueValue_t type, represents chip working mode
    */
   void setShutDownMode(eShutDownMode_t ShutDownMode);
   
   /**
-   * @brief 得到OS引脚的active状态是高电平还是低电平.
-   * @return 0或1 .
+   * @brief Get active state of OS pin (HIGH/LOW)
+   * @return 0 or 1
    * @n 0：LOW(active LOW)
    * @n 1：HIGH(active HIGH)
    */
   eOSPolarityMode_t getOSPolarityMode();
   /**
-   * @brief 设置OS引脚的active状态是高电平还是低电平..
-   * @param polarityMode eOSPolarityMode_t类型的值，代表OS引脚的极性
+   * @brief Set active state of OS pin to HIGH/LOW
+   * @param polarityMode eOSPolarityMode_t type, represents polarity of OS pin
    */
   void setOSPolarityMode(eOSPolarityMode_t polarityMode);
   
   /**
-   * @brief 得到OS引脚的工作模式.
-   * @return 0或1 .
-   * @n 0：OS comparator(比较器模式)
-   * @n 1：OS interrupt(中断模式)
+   * @brief Get OS pin working mode
+   * @return 0 or 1
+   * @n 0：OS comparator(comparator mode)
+   * @n 1：OS interrupt(interrupt mode)
    */
   eOSMode_t getOSMode();
   
   /**
-   * @brief 设置OS引脚的工作模式..
-   * @param OSMode eOSMode_t类型的值，代表OS引脚的工作模式.
+   * @brief Set OS pin working mode 
+   * @param OSMode eOSMode_t type, represents OS pin working mode
    */
   void setOSMode(eOSMode_t OSMode);
 
 private:
   
   /**
-   * @brief 通过IIC总线写入寄存器值
-   * @param reg  寄存器地址 8bits
-   * @param pBuf 要写入数据的存放缓存
-   * @param size 要写入数据的长度
-   * @return 返回实际读取的长度，返回0表示读取失败
+   * @brief Write value into register via IIC bus 
+   * @param reg  Register address 8bits
+   * @param pBuf Storage cache of the data to be written into
+   * @param size Length of the data to be written into
+   * @return Return the actually read length, fails to read if return 0.
    */
   void writeReg(uint8_t reg, void* pBuf, size_t size) ;
 
   /**
-   * @brief 读取寄存器函数，设计为虚函数，由派生类实现函数体
-   * @param reg  寄存器地址 8bits
-   * @param pBuf 要写入数据的存放缓存
-   * @param size 要写入数据的长度
-   * @return 返回实际读取的长度，返回0表示读取失败
+   * @brief Read register function 
+   * @param reg  Register address 8bits
+   * @param pBuf Storage cache of the data to be read
+   * @param size Length of the data to be read
+   * @return Return the actually read length, fails to read if return 0.
    */
   uint8_t readReg(uint8_t reg, void* pBuf, size_t size);
 private:
