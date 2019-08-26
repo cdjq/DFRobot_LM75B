@@ -1,10 +1,10 @@
 # DFRobot_LM75B
 The LM75B is a temperature-to-digital converter using an on-chip band gap temperature sensor and Sigma-Delta A-to-D conversion technique with an overtemperature output. It can be used to moniter the ambient temperature. The device also includes an open-drain output (OS) which becomes active when the temperature exceeds the programmed limits. The LM75B can communicate with controllers via a 2-wire serial I2C-bus interface. There are three selectable logic addreses pins so that eight devices can be connected on the same bus without address conflict. The LM75B can be configured for different operation conditions. It can be set in normal mode to periodically monitor the ambient temperature, or in shutdown mode to minimize power consumption. <br>
 
-  Resolution: 0.125°C <br>
-  Accuracy: ±2 °C <br>
-  Power Consumption: operating current typically 200uA, power down mode 1.0uA <br>
-  Operating Voltage: 2.8V～5.5V<br>
+  * Resolution: 0.125°C <br>
+  * Accuracy: ±2 °C <br>
+  * Power Consumption: operating current typically 200uA, power down mode 1.0uA <br>
+  * Operating Voltage: 2.8V～5.5V<br>
 ![正反面svg效果图](https://github.com/ouki-wang/DFRobot_Sensor/raw/master/resources/images/SEN0245svg1.png)
 
 ## Product Link（链接到英文商城）
@@ -23,7 +23,7 @@ The LM75B is a temperature-to-digital converter using an on-chip band gap temper
 
    1.Read ambient temperature and the value will be printed in ℃ and ℉. <br>
    2.Chip setting of serial print (chip operaton mode, OS polarity, OS output mode, the number of faults set in the queue, temperature threshold, hysteresis temperature). <br>
-   3.A high temperature warning will be shown on the serial port when the temperature exceeds user-defined temperature threshold.<br>
+   3.A high temperature alarm will be shown on the serial port when the temperature exceeds user-defined temperature threshold.<br>
    4.Use as a monitor device of thermostat to keep the temperature at a user-defined threshold point.<br>
 
 ## Installation
