@@ -75,10 +75,10 @@ void setup(void) {
     OS generates interrupt only when there is enough number of queue faults.
     Number of faults in the queue: Each time the temperature in the temperature register completes conversion, it will automatically
     be compared with threshold and hystersis temperature. 
-    eValue1=1, if temperature is more than threshold value once, OS output active state;
-    eValue2=2, if two successive temperatures are more than threshold value, OS output active state; 
-    eValue3=4, if four successive temperatures are more than threshold value, OS output active state; 
-    eValue4=6, if six successive temperatures are more than threshold value, OS output active state.
+    eValue1=1, if one temperature value is more than threshold value, OS output active state;
+    eValue2=2, if two successive temperature values are more than threshold value, OS output active state; 
+    eValue3=4, if four successive temperature values are more than threshold value, OS output active state; 
+    eValue4=6, if six successive temperature values are more than threshold value, OS output active state.
    */
   Serial.print("OS fault queue: ");
   Serial.print(lm75b.getQueueValue());
