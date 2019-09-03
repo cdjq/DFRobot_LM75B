@@ -113,22 +113,22 @@ public:
    * @brief Constructor 
    * @param pWire I2C bus pointer object, default Wire
    * @param addr 7-bits I2C address, the address value is decided by the first three bits.
-   * @n Value (0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F) default 0x48
+   * @n Value (0x48/0x49/0x4A/0x4B/0x4C/0x4D/0x4E/0x4F) default 0x4f
    * @n IIC address is formed as the chart below
    *   6  5  4  3  2  1   0
        1  0  0  1  A2 A1  A0
-   * @n The definition of address is shown below, change the address via jumper: default 0x48
+   * @n The definition of address is shown below, change the address via jumper: default 0x4f
        1  0  0  1  | A2 A1 A0
        1  0  0  1  | 1  1  1       0x4F
        1  0  0  1  | 1  1  0       0x4E
        1  0  0  1  | 1  0  1       0x4D
        1  0  0  1  | 1  0  0       0x4C
        1  0  0  1  | 0  1  1       0x4B
-       1  0  0  1  | 0  1  0       0x5A
+       1  0  0  1  | 0  1  0       0x4A
        1  0  0  1  | 0  0  1       0x49
        1  0  0  1  | 0  0  0       0x48
   */
-  DFRobot_LM75B(TwoWire *pWire = &Wire, uint8_t address = 0x48); 
+  DFRobot_LM75B(TwoWire *pWire = &Wire, uint8_t address = 0x4f); 
 
   /**
    * @brief init function
