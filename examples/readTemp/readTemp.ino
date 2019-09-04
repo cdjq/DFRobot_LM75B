@@ -93,7 +93,7 @@ void setup(void) {
    * @n Detection range: -55°C to +125°C.
    */
   Serial.print(lm75b.getTosC());
-  Serial.println("°C");
+  Serial.println(" C");
   /**
    * @brief Get threshold temperature(Tos:Overtemperature shutdown).
    * @return Return temperature value, unit: °F 
@@ -112,7 +112,7 @@ void setup(void) {
   */
   Serial.print("Hysteresis temperature (degree Celsius): ");
   Serial.print(lm75b.getHysteresisC());
-  Serial.println("°C");
+  Serial.println(" C");
   /**
    * @brief Get hysteresis temperature (User-defined temperature, ≤ Threshold)..
    * @return Return temperature, unit: °F 
@@ -120,17 +120,17 @@ void setup(void) {
    */
   //Serial.print("Hysteresis temperature (Fahrenheit): ");
   //Serial.print(lm75b.getHysteresisF());
-  //Serial.println("°F");
+  //Serial.println(" F");
   Serial.println("**-----------------------------------------------------**");
 }
 
 void loop(void) {
-  Serial.print("Ambient temperature (°C): ");
+  Serial.print("Ambient temperature ( C): ");
   Serial.print(/*degree Celsius=*/lm75b.getTemperatureC());
-  Serial.println("°C");
-  Serial.print("Ambient temperature (°F): ");
+  Serial.println(" C");
+  Serial.print("Ambient temperature ( F): ");
   Serial.print(/*Fahrenheit=*/lm75b.getTemperatureF());
-  Serial.println("°F");
+  Serial.println(" F");
   Serial.println("");
   // delay should be over 100ms;
   delay(1000);

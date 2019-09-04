@@ -63,7 +63,11 @@ void setup(void) {
     Serial.println("IIC init failed, please check if the connection is correct?");
     delay(1000);
   }
-  attachInterrupt(/*Interrupt number 0 represents digital pin2*/0,thermostat, CHANGE);  //Set trigger type to CHANGE, interrupt number 0(D Pin2)
+  #ifdef ARDUINO_ARCH_MPYTHON 
+  attachInterrupt(digitalPinToInterrupt(P16),thermostat,CHANGE);//Set trigger type to CHANGE, interrupt number P16
+  #else
+  attachInterrupt(/*Interrupt number 0 represents digital pin2*/0,thermostat,CHANGE);//et trigger type to CHANGE, interrupt number 0(D Pin2)
+  #endif
   pinMode(OSPin, INPUT);
   /**
    @brief Define threshold temperature(Tos:Overtemperature shutdown)
@@ -105,7 +109,7 @@ void setup(void) {
   */
   Serial.print("Threshold (degree Celsius): ");
   Serial.print(lm75b.getTosC());
-  Serial.println("°C");
+  Serial.println(" C");
   /**
    * @brief Get threshold temperature(Tos:Overtemperature shutdown).
    * @return Return temperature value, unit: °F 
@@ -113,13 +117,13 @@ void setup(void) {
    */
   //Serial.print("Threshold (Fahrenheit): ");
   //Serial.print(lm75b.getTosF());
-  //Serial.println("°F");
+  //Serial.println(" F");
   /*!
     getHysteresisC Get hysteresis temperature stored in Thyst register
   */
   Serial.print("Hysteresis temperature (degree Celsius): ");
   Serial.print(lm75b.getHysteresisC());
-  Serial.println("°C");
+  Serial.println(" C");
   /**
    * @brief Get hysteresis temperature (User-defined temperature, ≤ Threshold)..
    * @return Return temperature, unit: °F 
@@ -127,7 +131,7 @@ void setup(void) {
    */
   //Serial.print("Threshold temperature (Fahrenheit): ");
   //Serial.print(lm75b.getTosF());
-  //Serial.println("°F");
+  //Serial.println(" F");
   Serial.println("**-----------------------------------------------------**");
     if(lm75b.getTemperatureC()<lm75b.getHysteresisC()) {
       Serial.println("Ambient temperature less than Hysteresis, increase the temperature");
@@ -154,7 +158,7 @@ void loop(void) {
   Serial.print("Ambient Temperature: ");
   /*getTempC Get ambient temperature*/
   Serial.print(/*Temperature=*/lm75b.getTemperatureC());
-  Serial.println("°C");
+  Serial.println(" C");
   if((state == 0) && (thermostatState == true)){
    Serial.println("Temperature reducing stage: reduce the temperature under hysteresis temperature to activate the sensor to make reaction");
   } 

@@ -56,12 +56,12 @@ void loop(void) {
   //a certian data conversion cycle is needed
   delay(200);
   Serial.println("Chip enters normal mode, read temperature........");
-  Serial.print("ambient temperature (°C): ");
+  Serial.print("ambient temperature ( C): ");
   Serial.print(/*Celsius temperature=*/lm75b.getTemperatureC());
-  Serial.println("°C");
-  Serial.print("ambient temperature(°F) ");
+  Serial.println(" C");
+  Serial.print("ambient temperature( F) ");
   Serial.print(/*Fahrenheit=*/lm75b.getTemperatureF());
-  Serial.println("°F");
+  Serial.println(" F");
   Serial.println("Chip enters energy saving mode........");
   lm75b.setShutDownMode(/*ShutDownMode=*/lm75b.eShutdown);
   // Read temperature once and enter energy saving mode immediately every 20s. 

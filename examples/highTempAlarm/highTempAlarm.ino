@@ -135,6 +135,11 @@ void setup(void) {
 }
 
 void loop(void) {
+
+  Serial.print("Ambient temperature: ");
+  /*getTempC Get ambient temperature */
+  Serial.print(/*Temperature=*/lm75b.getTemperatureC());
+  Serial.println(" C");
   //Detect the OS state to check if the temperaure exceeds the pre-set value. 
    /*!
     Default setiing device operation mode selection：(0*)normal
@@ -144,13 +149,9 @@ void loop(void) {
             reserved                       ： 000*
   */
   //Since polarity is selected to active LOW mode, OS output LOW when temperature is over threshold. 
-  while (digitalRead(OSPin) == 0) {
+  if(digitalRead(OSPin) == 0) {
     Serial.println("Warning: Ambient temperature exceeds threshold vaule");
-    delay(3000);
   }
-  Serial.print("Ambient temperature: ");
-  /*getTempC Get ambient temperature */
-  Serial.print(/*Temperature=*/lm75b.getTemperatureC());
-  Serial.println("°C");
   delay(3000);
+  
 }
