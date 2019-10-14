@@ -138,6 +138,7 @@ void setup(void) {
     }
     else if(lm75b.getTemperatureC()>lm75b.getTosC()){
       Serial.println("Ambient temperature more than Threshold, decrease the temperature");
+	  state = 0 ;
     }
     else{
       Serial.println("Temperature is fine");
