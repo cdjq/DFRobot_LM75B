@@ -44,6 +44,16 @@ void setup(void) {
     Serial.println("IIC init failed, please check if the connection is correct?");
     delay(1000);
   }
+  
+  /*!
+    Set chip working mode 
+    ShutDownMode Value: 
+    eNormal  ： In this mode, data acquisition cycle is 100ms, among which 10ms is used for data conversion and needs 300uA current.
+              The rest is in idle state and needs 10uA.
+    eShutdown ：In this mode, data acquisition stops, but IIC communication and register works normally.
+  */
+  lm75b.setShutDownMode(/*ShutDownMode=*/lm75b.eNormal);
+  
   //Chip will be reset when repowered. 
   Serial.println("**--------------------the chip set----------------------**");
   Serial.print("Chip working mode: ");
@@ -122,6 +132,7 @@ void setup(void) {
   //Serial.print(lm75b.getHysteresisF());
   //Serial.println(" F");
   Serial.println("**-----------------------------------------------------**");
+
 }
 
 void loop(void) {
